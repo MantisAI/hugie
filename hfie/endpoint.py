@@ -24,31 +24,31 @@ def list(json: bool = typer.Option(False, help="Prints the full output in JSON."
     r = requests.get(f"{settings.endpoint_url}", headers=headers)
 
     if json:
-        typer.echo(r.json())
+        return typer.echo(r.json())
 
     else:
         data = r.json()
 
         names = []
-        types = []
         states = []
         models = []
         revs = []
+        url = []
 
         for item in data["items"]:
             names.append(item["name"])
-            types.append(item["type"])
             states.append(item["status"]["state"])
             models.append(item["model"]["repository"])
             revs.append(item["model"]["revision"])
+            url.append(item["status"]["url"])
 
         table = format_table(
-            ["Name", "Type", "State", "Model", "Revision"],
+            ["Name", "State", "Model", "Revision", "Url"],
             names,
-            types,
             states,
             models,
             revs,
+            url,
         )
 
         typer.secho(table)
@@ -75,6 +75,8 @@ def update(
     """
     Update an endpoint
     """
+    with open(data) as f:
+        data = json.load(f)
     r = requests.put(f"{settings.endpoint_url}/{name}", headers=headers, json=data)
     typer.echo(r.json())
 
@@ -88,6 +90,12 @@ def delete(name: str = typer.Argument(..., help="Endpoint name")):
     typer.echo(r.json())
 
 
+def get_info(name: str):
+    r = requests.get(f"{settings.endpoint_url}/{name}", headers=headers)
+
+    return r.json()
+
+
 @app.command()
 def info(
     name: str = typer.Argument(..., help="Endpoint name"),
@@ -96,34 +104,31 @@ def info(
     """
     Get info about an endpoint
     """
-    r = requests.get(f"{settings.endpoint_url}/{name}", headers=headers)
+    info = get_info(name)
 
     if json:
-        typer.echo(r.json())
+        typer.echo(info)
 
     else:
-        data = r.json()
-        print(data)
-
         names = []
-        types = []
         states = []
         models = []
         revs = []
+        url = []
 
-        names.append(data["name"])
-        types.append(data["type"])
-        states.append(data["status"]["state"])
-        models.append(data["model"]["repository"])
-        revs.append(data["model"]["revision"])
+        names.append(info["name"])
+        states.append(info["status"]["state"])
+        models.append(info["model"]["repository"])
+        revs.append(info["model"]["revision"])
+        url.append(info["status"]["url"])
 
         table = format_table(
-            ["Name", "Type", "State", "Model", "Revision"],
+            ["Name", "State", "Model", "Revision", "Url"],
             names,
-            types,
             states,
             models,
             revs,
+            url,
         )
 
         typer.secho(table)
@@ -136,3 +141,19 @@ def logs(name: str = typer.Argument(..., help="Endpoint name")):
     """
     r = requests.get(f"{settings.endpoint_url}/{name}/logs", headers=headers)
     typer.echo(r.content)
+
+
+@app.command()
+def test(
+    name: str = typer.Argument(..., help="Endpoint name"),
+    inputs: str = typer.Argument(..., help="Input to send the model."),
+):
+    """
+    Test an endpoint
+    """
+
+    info = get_info(name)
+    url = info["status"]["url"]
+    data = {"inputs": inputs, "parameters": {"top_k": 10}}
+    r = requests.post(url, headers=headers, json=data)
+    typer.echo(r.json())

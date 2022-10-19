@@ -32,7 +32,39 @@ Commands:
 
 ```
 
+# JSON format
 
+The `endpoint create` and `endpoint update` commands both require JSONs of the fomat:
+
+```json
+{
+  "accountId": null,
+  "compute": {
+    "accelerator": "cpu",
+    "instanceSize": "large",
+    "instanceType": "c6i",
+    "scaling": {
+      "maxReplica": 1,
+      "minReplica": 1
+    }
+  },
+  "model": {
+    "framework": "custom",
+    "image": {
+      "huggingface": {}
+    },
+    "repository": "mantisnlp/oms_nlu",
+    "revision": "db5af7357469e6d31e909d18faeeeff5efb40ec5",
+    "task": "text-classification"
+  },
+  "name": "aws-oms-nlu-dev",
+  "provider": {
+    "region": "us-east-1",
+    "vendor": "aws"
+  },
+  "type": "protected"
+}
+```
 
 # For development
 
