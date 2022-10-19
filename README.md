@@ -9,10 +9,14 @@ See API docs: https://huggingface.co/docs/inference-endpoints/api_reference
 The package is pip installable and can be installed directly from github with:
 
 ```
-pip install git+https://github.com/mantisnlp/hfie.git
+pip install git+https://github.com/MantisAI/hfie.git
 ```
 
 # Usage
+
+See the demo for a sense of what it can do:
+
+[![asciicast](https://asciinema.org/a/m2MyTRsJ1H6kaW2ygwr37qbh2.svg)](https://asciinema.org/a/m2MyTRsJ1H6kaW2ygwr37qbh2)
 
 ```
 hfie endpoint --help
@@ -28,6 +32,7 @@ Commands:
   info    Get info about an endpoint
   list    List all the deployed endpoints
   logs    Get logs about an endpoint
+  test    Test and endpoint
   update  Update an endpoint
 
 ```

@@ -29,29 +29,33 @@ def list(json: bool = typer.Option(False, help="Prints the full output in JSON."
     else:
         data = r.json()
 
-        names = []
-        states = []
-        models = []
-        revs = []
-        url = []
+        if data["items"]:
 
-        for item in data["items"]:
-            names.append(item["name"])
-            states.append(item["status"]["state"])
-            models.append(item["model"]["repository"])
-            revs.append(item["model"]["revision"])
-            url.append(item["status"]["url"])
+            names = []
+            states = []
+            models = []
+            revs = []
+            url = []
 
-        table = format_table(
-            ["Name", "State", "Model", "Revision", "Url"],
-            names,
-            states,
-            models,
-            revs,
-            url,
-        )
+            for item in data["items"]:
+                names.append(item["name"])
+                states.append(item["status"]["state"])
+                models.append(item["model"]["repository"])
+                revs.append(item["model"]["revision"])
+                url.append(item["status"].get("url"))
 
-        typer.secho(table)
+                table = format_table(
+                    ["Name", "State", "Model", "Revision", "Url"],
+                    names,
+                    states,
+                    models,
+                    revs,
+                    url,
+                )
+
+            typer.secho(table)
+        else:
+            typer.secho("No endpoints found")
 
 
 @app.command()
@@ -91,6 +95,7 @@ def delete(name: str = typer.Argument(..., help="Endpoint name")):
 
 
 def get_info(name: str):
+
     r = requests.get(f"{settings.endpoint_url}/{name}", headers=headers)
 
     return r.json()
@@ -106,32 +111,36 @@ def info(
     """
     info = get_info(name)
 
-    if json:
-        typer.echo(info)
+    if info.get("name"):
 
+        if json:
+            typer.echo(info)
+
+        else:
+            names = []
+            states = []
+            models = []
+            revs = []
+            url = []
+
+            names.append(info["name"])
+            states.append(info["status"]["state"])
+            models.append(info["model"]["repository"])
+            revs.append(info["model"]["revision"])
+            url.append(info["status"].get("url"))
+
+            table = format_table(
+                ["Name", "State", "Model", "Revision", "Url"],
+                names,
+                states,
+                models,
+                revs,
+                url,
+            )
+
+            typer.secho(table)
     else:
-        names = []
-        states = []
-        models = []
-        revs = []
-        url = []
-
-        names.append(info["name"])
-        states.append(info["status"]["state"])
-        models.append(info["model"]["repository"])
-        revs.append(info["model"]["revision"])
-        url.append(info["status"]["url"])
-
-        table = format_table(
-            ["Name", "State", "Model", "Revision", "Url"],
-            names,
-            states,
-            models,
-            revs,
-            url,
-        )
-
-        typer.secho(table)
+        typer.secho(f"Endpoint {name} not found")
 
 
 @app.command()
