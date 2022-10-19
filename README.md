@@ -12,6 +12,10 @@ The package is pip installable and can be installed directly from github with:
 pip install git+https://github.com/MantisAI/hfie.git
 ```
 
+## ENV vars
+
+To get started, you must set your individual or organisation token into an env var called `TOKEN`.
+
 # Usage
 
 See the demo for a sense of what it can do:
@@ -44,7 +48,7 @@ The `endpoint create` and `endpoint update` commands both require JSONs of the f
 ```json
 {
   "accountId": null,
-  "compute": {
+  "compute":
     "accelerator": "cpu",
     "instanceSize": "large",
     "instanceType": "c6i",
