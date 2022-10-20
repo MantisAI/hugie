@@ -1,4 +1,4 @@
-# HF Endpoints
+# HuggingFace Inference Endpoints helper
 
 A CLI interface for working with the HuggingFace Inference API.
 
@@ -14,11 +14,11 @@ pip install git+https://github.com/MantisAI/hfie.git
 
 ## ENV vars
 
-To get started, you must set your individual or organisation token into an env var called `TOKEN`.
+To get started, you must set your individual or organisation token into an env var called `HUGGINGFACE_READ_TOKEN`.
 
 # Usage
 
-See the demo for a sense of what it can do:
+tldr; watch the video:
 
 [![asciicast](https://asciinema.org/a/m2MyTRsJ1H6kaW2ygwr37qbh2.svg)](https://asciinema.org/a/m2MyTRsJ1H6kaW2ygwr37qbh2)
 
