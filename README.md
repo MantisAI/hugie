@@ -1,15 +1,15 @@
 # Huggingface Inference Endpoints helper
 
-A Command Line Interface (CLI) for working with the Huggingface Inference API.
+A Command Line Interface (CLI) for working with the Huggingface Inference Endpoints API.
 
-See API docs: https: // huggingface.co/docs/inference-endpoints/api_reference
+See API docs: https://huggingface.co/docs/inference-endpoints/api_reference
 
 # Getting started
 
 The package is pip installable and can be installed directly from github with:
 
 ```
-pip install git+https: // github.com/MantisAI/hfie.git
+pip install git+https://github.com/MantisAI/hfie.git
 ```
 
 # ENV vars
