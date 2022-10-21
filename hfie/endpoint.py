@@ -29,7 +29,7 @@ def list(json: bool = typer.Option(False, help="Prints the full output in JSON."
     else:
         data = r.json()
 
-        if data["items"]:
+        if data.get("items"):
 
             names = []
             states = []
