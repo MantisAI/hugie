@@ -20,7 +20,7 @@ To get started, you must set your individual or organisation Huggingface token i
 
 tldr; watch the video:
 
-[![asciicast](https://asciinema.org/a/m2MyTRsJ1H6kaW2ygwr37qbh2.svg)](https: // asciinema.org/a/m2MyTRsJ1H6kaW2ygwr37qbh2)
+[![asciicast](https://asciinema.org/a/QA68DK9RPsNiO2zycx4ihugg0.svg)](https://asciinema.org/a/QA68DK9RPsNiO2zycx4ihugg0)
 
 # Getting help
 

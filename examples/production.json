@@ -1,0 +1,27 @@
+{
+  "accountId": null,
+  "compute": {
+    "accelerator": "cpu",
+    "instanceSize": "small",
+    "instanceType": "c6i",
+    "scaling": {
+      "maxReplica": 1,
+      "minReplica": 1
+    }
+  },
+  "model": {
+    "framework": "custom",
+    "image": {
+      "huggingface": {}
+    },
+    "repository": "t5-small",
+    "revision": "main",
+    "task": "translation"
+  },
+  "name": "production",
+  "provider": {
+    "region": "us-east-1",
+    "vendor": "aws"
+  },
+  "type": "protected"
+}
