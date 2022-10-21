@@ -19,7 +19,7 @@ virtualenv:
 	virtualenv --python $(PYTHON_VERSION) $(VIRTUALENV)
 	$(VIRTUALENV)/bin/pip3 install -e .[dev]
 	${VIRTUALENV}/bin/pre-commit install --hook-type pre-push --hook-type post-checkout --hook-type pre-commit
-	touch $@
+	. $(VIRTUALENV)/bin/activate
 
 # Delete all compiled Python files
 .PHONY: clean
