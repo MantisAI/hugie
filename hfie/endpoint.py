@@ -96,15 +96,14 @@ def delete(
     Delete an endpoint
     """
     if not force:
-        decision = input(
-            f"Are you sure you want to delete endpoint {name}? y/n (Default: n). Use --force to override"
+        delete_endpoint = typer.confirm(
+            f"Are you sure you want to delete endpoint. Use --force to override"
         )
+        if not delete_endpoint:
+            typer.echo("Not deleting endpoint")
+            raise typer.Abort()
 
-        if decision and decision not in ["y", "n"]:
-            typer.echo("Only y or n accepted")
-            return
-
-    if force or decision == "y":
+    if force or delete_endpoint:
         r = requests.delete(f"{settings.endpoint_url}/{name}", headers=headers)
         typer.echo(r.json())
 
