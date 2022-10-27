@@ -18,7 +18,7 @@ virtualenv:
 	@mkdir -p $(VIRTUALENV)
 	virtualenv --python $(PYTHON_VERSION) $(VIRTUALENV)
 	$(VIRTUALENV)/bin/pip3 install -e .[dev]
-	${VIRTUALENV}/bin/pre-commit install --hook-type pre-push --hook-type post-checkout --hook-type pre-commit
+	${VIRTUALENV}/bin/pre-commit install
 	. $(VIRTUALENV)/bin/activate
 
 # Delete all compiled Python files

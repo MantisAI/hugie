@@ -1,7 +1,7 @@
-*egg-info/
-.env
+# Venv, direnv
 .envrc
 .venv/
-build/
-virtualenv
+
+# Python cache, eggs
+*egg-info/
 *__pycache__/
