@@ -86,12 +86,27 @@ def update(
 
 
 @app.command()
-def delete(name: str = typer.Argument(..., help="Endpoint name")):
+def delete(
+    name: str = typer.Argument(..., help="Endpoint name"),
+    force: bool = typer.Option(
+        False, help="Force deletion without asking user confirmation"
+    ),
+):
     """
     Delete an endpoint
     """
-    r = requests.delete(f"{settings.endpoint_url}/{name}", headers=headers)
-    typer.echo(r.json())
+    if not force:
+        decision = input(
+            f"Are you sure you want to delete endpoint {name}? y/n (Default: n) "
+        )
+
+        if decision and decision not in ["y", "n"]:
+            typer.echo("Only y or n accepted")
+            return
+
+    if force or decision == "y":
+        r = requests.delete(f"{settings.endpoint_url}/{name}", headers=headers)
+        typer.echo(r.json())
 
 
 def get_info(name: str):
