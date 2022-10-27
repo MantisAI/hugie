@@ -86,12 +86,26 @@ def update(
 
 
 @app.command()
-def delete(name: str = typer.Argument(..., help="Endpoint name")):
+def delete(
+    name: str = typer.Argument(..., help="Endpoint name"),
+    force: bool = typer.Option(
+        False, help="Force deletion without asking user confirmation"
+    ),
+):
     """
     Delete an endpoint
     """
-    r = requests.delete(f"{settings.endpoint_url}/{name}", headers=headers)
-    typer.echo(r.json())
+    if not force:
+        delete_endpoint = typer.confirm(
+            f"Are you sure you want to delete endpoint. Use --force to override"
+        )
+        if not delete_endpoint:
+            typer.echo("Not deleting endpoint")
+            raise typer.Abort()
+
+    if force or delete_endpoint:
+        r = requests.delete(f"{settings.endpoint_url}/{name}", headers=headers)
+        typer.echo(r.json())
 
 
 def get_info(name: str):
