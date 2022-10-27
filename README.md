@@ -77,6 +77,9 @@ To delete the endpoint
 hfie endpoint delete development
 ```
 
+this will ask you if you are sure you want to delete before moving forward. If
+you want to force the deletion you can use `--force`
+
 # JSON format
 
 The `endpoint create` and `endpoint update` commands both require JSONs of the fomat:

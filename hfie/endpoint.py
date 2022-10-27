@@ -97,7 +97,7 @@ def delete(
     """
     if not force:
         decision = input(
-            f"Are you sure you want to delete endpoint {name}? y/n (Default: n) "
+            f"Are you sure you want to delete endpoint {name}? y/n (Default: n). Use --force to override"
         )
 
         if decision and decision not in ["y", "n"]:
