@@ -1,5 +1,7 @@
 # Huggingface Inference Endpoints helper
 
+Documentation: https://mantisai.github.io/hfie/ 📑
+
 A Command Line Interface (CLI) for working with the Huggingface Inference Endpoints API.
 
 See API docs: https://huggingface.co/docs/inference-endpoints/api_reference
