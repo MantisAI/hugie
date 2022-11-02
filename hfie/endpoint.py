@@ -20,7 +20,7 @@ def list(json: bool = typer.Option(False, help="Prints the full output in JSON."
     """
     List all the deployed endpoints
     """
-    response = requests.get(f"{settings.endpoint_url}", headers=headers)
+    response = requests.get(settings.endpoint_url, headers=headers)
 
     if json:
         return typer.echo(response.json())
@@ -70,7 +70,7 @@ def create(
 
     data = load_json(data)
     try:
-        response = requests.post(settings.endpoint_url, headers, data)
+        response = requests.post(settings.endpoint_url, headers=headers, json=data)
         response.raise_for_status()
     except requests.exceptions.HTTPError as e:
         if response.json().get("error"):
@@ -99,7 +99,18 @@ def update(
     data = load_json(data)
 
     try:
-        response = requests.put(f"{settings.endpoint_url}/{name}", headers, data)
+        response = requests.put(
+            f"{settings.endpoint_url}/{name}", headers=headers, json=data
+        )
+    except requests.exceptions.HTTPError as e:
+        if response.json().get("error"):
+            typer.secho(
+                f"Error updating endpoint: {response.json()['error']}",
+                fg=typer.colors.RED,
+            )
+        else:
+            typer.secho("Error updating endpoint", fg=typer.colors.RED)
+        raise SystemExit(e)
     except requests.exceptions.RequestException as e:
         typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
         raise SystemExit(e)
@@ -130,7 +141,9 @@ def delete(
 
     if force or delete_endpoint:
         try:
-            requests.delete(f"{settings.endpoint_url}/{name}", headers=headers, data={})
+            response = requests.delete(
+                f"{settings.endpoint_url}/{name}", headers=headers, json={}
+            )
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
             typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
@@ -150,7 +163,7 @@ def info(
 
     try:
         response = requests.get(
-            f"{settings.endpoint_url}/{name}", headers=headers, data={}
+            f"{settings.endpoint_url}/{name}", headers=headers, json={}
         )
         response.raise_for_status()
     except requests.exceptions.RequestException as e:
@@ -198,7 +211,7 @@ def logs(name: str = typer.Argument(..., help="Endpoint name")):
     """
     try:
         response = requests.get(
-            f"{settings.endpoint_url}/{name}/logs", headers=headers, data={}
+            f"{settings.endpoint_url}/{name}/logs", headers=headers, json={}
         )
         response.raise_for_status()
     except requests.exceptions.RequestException as e:
@@ -230,11 +243,12 @@ def test(
     # Get the endpoint url from endpoint info
     try:
         response = requests.get(
-            f"{settings.endpoint_url}/{name}", headers=headers, data={}
+            f"{settings.endpoint_url}/{name}", headers=headers, json={}
         )
         response.raise_for_status()
     except requests.exceptions.RequestException as e:
         typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
+        raise SystemExit(e)
 
     info = response.json()
     url = info["status"]["url"]
@@ -246,7 +260,7 @@ def test(
 
     # Send a call to the endpoint
     try:
-        response = requests.post(url, headers=headers, data=data)
+        response = requests.post(url, headers=headers, json=data)
         response.raise_for_status()
     except requests.exceptions.RequestException as e:
         typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
