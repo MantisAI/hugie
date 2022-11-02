@@ -1,7 +1,6 @@
 import requests
 import typer
 
-from hfie.api import call
 from hfie.settings import Settings
 from hfie.utils import format_table, load_json
 
@@ -13,6 +12,7 @@ headers = {
     "Authorization": f"Bearer {settings.token}",
     "Content-Type": "application/json",
 }
+API_ERROR_MESSAGE = "An error occured while making the API call"
 
 
 @app.command()
@@ -20,13 +20,13 @@ def list(json: bool = typer.Option(False, help="Prints the full output in JSON."
     """
     List all the deployed endpoints
     """
-    r = requests.get(f"{settings.endpoint_url}", headers=headers)
+    response = requests.get(f"{settings.endpoint_url}", headers=headers)
 
     if json:
-        return typer.echo(r.json())
+        return typer.echo(response.json())
 
     else:
-        data = r.json()
+        data = response.json()
 
         if data.get("items"):
 
@@ -69,9 +69,23 @@ def create(
     """
 
     data = load_json(data)
-    r = call(settings.endpoint_url, headers, data, call="post")
+    try:
+        response = requests.post(settings.endpoint_url, headers, data)
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as e:
+        if response.json().get("error"):
+            typer.secho(
+                f"Error creating endpoint: {response.json()['error']}",
+                fg=typer.colors.RED,
+            )
+        else:
+            typer.secho("Error creating endpoint", fg=typer.colors.RED)
+        raise SystemExit(e)
+    except requests.exceptions.RequestException as e:
+        typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
+        raise SystemExit(e)
     typer.secho("Endpoint created successfully", fg=typer.colors.GREEN)
-    typer.echo(r.json())
+    typer.echo(response.json())
 
 
 @app.command()
@@ -84,9 +98,14 @@ def update(
     """
     data = load_json(data)
 
-    r = call(f"{settings.endpoint_url}/{name}", headers, data, call="put")
+    try:
+        response = requests.put(f"{settings.endpoint_url}/{name}", headers, data)
+    except requests.exceptions.RequestException as e:
+        typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
+        raise SystemExit(e)
+
     typer.secho("Endpoint updated successfully", fg=typer.colors.GREEN)
-    typer.echo(r.json())
+    typer.echo(response.json())
 
 
 @app.command()
@@ -110,8 +129,13 @@ def delete(
             raise typer.Abort()
 
     if force or delete_endpoint:
+        try:
+            requests.delete(f"{settings.endpoint_url}/{name}", headers=headers, data={})
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
+            raise SystemExit(e)
 
-        call(f"{settings.endpoint_url}/{name}", headers=headers, data={}, call="delete")
         typer.secho("Endpoint deleted successfully", fg=typer.colors.GREEN)
 
 
@@ -124,8 +148,16 @@ def info(
     Get info about an endpoint
     """
 
-    r = call(f"{settings.endpoint_url}/{name}", headers=headers, data={}, call="get")
-    info = r.json()
+    try:
+        response = requests.get(
+            f"{settings.endpoint_url}/{name}", headers=headers, data={}
+        )
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
+        raise SystemExit(e)
+
+    info = response.json()
 
     if info.get("name"):
 
@@ -164,10 +196,16 @@ def logs(name: str = typer.Argument(..., help="Endpoint name")):
     """
     Get logs about an endpoint
     """
-    r = call(
-        f"{settings.endpoint_url}/{name}/logs", headers=headers, data={}, call="get"
-    )
-    typer.echo(r.content)
+    try:
+        response = requests.get(
+            f"{settings.endpoint_url}/{name}/logs", headers=headers, data={}
+        )
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
+        raise SystemExit(e)
+
+    typer.echo(response.content)
 
 
 @app.command()
@@ -190,9 +228,15 @@ def test(
         raise typer.Abort()
 
     # Get the endpoint url from endpoint info
+    try:
+        response = requests.get(
+            f"{settings.endpoint_url}/{name}", headers=headers, data={}
+        )
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
 
-    r = call(f"{settings.endpoint_url}/{name}", headers=headers, data={}, call="get")
-    info = r.json()
+    info = response.json()
     url = info["status"]["url"]
 
     if input_file:
@@ -201,6 +245,11 @@ def test(
         data = {"inputs": inputs, "parameters": {"top_k": 10}}
 
     # Send a call to the endpoint
+    try:
+        response = requests.post(url, headers=headers, data=data)
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
+        raise SystemExit(e)
 
-    r = call(url, headers=headers, data=data, call="post")
-    typer.echo(r.json())
+    typer.echo(response.json())
