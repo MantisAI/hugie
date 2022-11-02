@@ -9,3 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add endpoint subcommand
 - Add endpoint test command
+
+### Changed
+- Add error handling
+- Abstract json loading to `load_json` function
+- Allow test command to take an input JSON containing queries
