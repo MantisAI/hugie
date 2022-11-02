@@ -123,3 +123,8 @@ Create a virtual environment and install the package
 ```
 make virtualenv
 ```
+
+Run tests
+```
+pytest
+```
