@@ -41,7 +41,10 @@ def test_create(monkeypatch, data_path):
         def json():
             pass
 
-    monkeypatch.setattr("requests.post", lambda url, headers, json: MockCreateResponse)
+        def raise_for_status():
+            pass
+
+    monkeypatch.setattr("requests.post", lambda url, **kwargs: MockCreateResponse)
     result = runner.invoke(app, ["create", data_path])
     assert result.exit_code == 0
 
@@ -61,7 +64,12 @@ def test_delete_force(monkeypatch):
         def json():
             pass
 
-    monkeypatch.setattr("requests.delete", lambda url, headers: MockDeleteResponse)
+        def raise_for_status():
+            pass
+
+    monkeypatch.setattr(
+        "requests.delete", lambda url, headers, json: MockDeleteResponse
+    )
     result = runner.invoke(app, ["delete", "test", "--force"])
     assert result.exit_code == 0
 
@@ -71,18 +79,17 @@ def test_delete_confirm(monkeypatch):
         def json():
             pass
 
-    monkeypatch.setattr("requests.delete", lambda url, headers: MockDeleteResponse)
+        def raise_for_status():
+            pass
+
+    monkeypatch.setattr(
+        "requests.delete", lambda url, headers, json: MockDeleteResponse
+    )
     result = runner.invoke(app, ["delete", "test"], input="y")
-    print(result.stdout)
     assert result.exit_code == 0
 
 
 def test_delete_no_confirm(monkeypatch):
-    class MockDeleteResponse:
-        def json():
-            pass
-
-    monkeypatch.setattr("requests.delete", lambda url, headers: MockDeleteResponse)
     result = runner.invoke(app, ["delete", "test"], input="n")
     assert result.exit_code == 1
 
@@ -96,7 +103,10 @@ def test_info(monkeypatch):
                 "model": {"repository": "test", "revision": "test"},
             }
 
-    monkeypatch.setattr("requests.get", lambda url, headers: MockInfoResponse)
+        def raise_for_status():
+            pass
+
+    monkeypatch.setattr("requests.get", lambda url, headers, json: MockInfoResponse)
     result = runner.invoke(app, ["info", "test"])
     assert result.exit_code == 0
 
@@ -106,7 +116,10 @@ def test_logs(monkeypatch, data_path):
         def content():
             pass
 
-    monkeypatch.setattr("requests.get", lambda url, headers: MockLogsResponse)
+        def raise_for_status():
+            pass
+
+    monkeypatch.setattr("requests.get", lambda url, headers, json: MockLogsResponse)
     result = runner.invoke(app, ["logs", "test"])
     assert result.exit_code == 0
 
@@ -116,11 +129,17 @@ def test_test(monkeypatch):
         def json():
             return {"status": {"url": "test"}}
 
+        def raise_for_status():
+            pass
+
     class MockPredictResponse:
         def json():
             pass
 
-    monkeypatch.setattr("requests.get", lambda url, headers: MockInfoResponse)
+        def raise_for_status():
+            pass
+
+    monkeypatch.setattr("requests.get", lambda url, headers, json: MockInfoResponse)
     monkeypatch.setattr("requests.post", lambda url, headers, json: MockPredictResponse)
     result = runner.invoke(app, ["test", "name", "inputs"])
     assert result.exit_code == 0
