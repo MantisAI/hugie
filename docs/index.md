@@ -1,17 +1,15 @@
-# Welcome to MkDocs
+# Hfie ✨
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+Hfie is a tool that allows you to interact with HuggingFace
+Inference Endpoints via the command line.
 
-## Commands
+## Demo
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+[![asciicast](https://asciinema.org/a/QA68DK9RPsNiO2zycx4ihugg0.svg)](https://asciinema.org/a/QA68DK9RPsNiO2zycx4ihugg0)
 
-## Project layout
+## Docs
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+```
+* Installation - How to install the library
+* Endpoint - How to use the endpoint command
+```
