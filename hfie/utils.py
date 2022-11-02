@@ -1,16 +1,6 @@
 import wasabi
 
 
-def get_column_widths(columns):
-    """Get the width of each column in a list of lists."""
-    widths = []
-
-    for column in columns:
-        widths.append(max([len(str(i)) for i in column]))
-
-    return widths
-
-
 def format_table(headers: list, *args):
     """
     Formats a wasabi table ready for printing
@@ -22,8 +12,7 @@ def format_table(headers: list, *args):
     """
 
     data = list(map(tuple, zip(*args)))
-    widths = get_column_widths(args)
 
-    table = wasabi.table(data, header=headers, divider=True, widths=widths)
+    table = wasabi.table(data, header=headers, divider=True)
 
     return table
