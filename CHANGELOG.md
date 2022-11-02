@@ -13,4 +13,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Add error handling
 - Abstract json loading to `load_json` function
-- Allow test command to take an input JSON containign queries
+- Allow test command to take an input JSON containing queries
