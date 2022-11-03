@@ -12,7 +12,11 @@ runner = CliRunner()
 @pytest.fixture
 def data_path(tmp_path):
     data_path = os.path.join(tmp_path, "data.json")
-    data = {}
+    data = {
+        "name": "development",
+        "provider": {"vendor": "aws"},
+        "model": {"repository": "t5"},
+    }
     with open(data_path, "w") as f:
         f.write(json.dumps(data))
     return data_path
