@@ -86,7 +86,7 @@ def create(
         typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
         raise SystemExit(e)
     typer.secho(
-        f"Endpoint {data['name']} created successfully in {data['provider']['vendor']} using {data['model']['repository']}",
+        f"Endpoint {data['name']} created successfully on {data['provider']['vendor']} using {data['model']['repository']}",
         fg=typer.colors.GREEN,
     )
     if json:
