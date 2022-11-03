@@ -146,8 +146,15 @@ def delete(
             )
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
-            typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
-            raise SystemExit(e)
+            if response.status_code == 404:
+                typer.secho(
+                    f"Endpoint {name} does not exist so it cannot be deleted",
+                    fg=typer.colors.YELLOW,
+                )
+                raise SystemExit
+            else:
+                typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
+                raise SystemExit(e)
 
         typer.secho("Endpoint deleted successfully", fg=typer.colors.GREEN)
 

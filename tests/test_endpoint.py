@@ -2,6 +2,7 @@ import json
 import os
 
 from typer.testing import CliRunner
+import requests
 import pytest
 
 from hfie.endpoint import app
@@ -92,6 +93,23 @@ def test_delete_confirm(monkeypatch):
 def test_delete_no_confirm(monkeypatch):
     result = runner.invoke(app, ["delete", "test"], input="n")
     assert result.exit_code == 1
+
+
+def test_delete_non_existing_endpoint(monkeypatch):
+    class MockDeleteResponse:
+        def json():
+            pass
+
+        def raise_for_status():
+            raise requests.exceptions.RequestException
+
+        status_code = 404
+
+    monkeypatch.setattr(
+        "requests.delete", lambda url, headers, json: MockDeleteResponse
+    )
+    result = runner.invoke(app, ["delete", "test"], input="y")
+    assert result.exit_code == 0
 
 
 def test_info(monkeypatch):
