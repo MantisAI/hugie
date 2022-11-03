@@ -1,34 +1,8 @@
-# Huggingface Inference Endpoints helper
+# Endpoint
 
-Documentation: https://mantisai.github.io/hfie/ 📑
-
-A Command Line Interface (CLI) for working with the Huggingface Inference Endpoints API.
-
-See API docs: https://huggingface.co/docs/inference-endpoints/api_reference
-
-# Getting started
-
-The package is pip installable and can be installed directly from github with:
+This page details the usage of the endpoint command
 
 ```
-pip install git+https://github.com/MantisAI/hfie.git
-```
-
-# ENV vars
-
-To get started, you must set your individual or organisation Huggingface token into an env var called `HUGGINGFACE_READ_TOKEN`.
-
-# Usage
-
-tldr; watch the video:
-
-[![asciicast](https://asciinema.org/a/QA68DK9RPsNiO2zycx4ihugg0.svg)](https://asciinema.org/a/QA68DK9RPsNiO2zycx4ihugg0)
-
-# Getting help
-
-```
-hfie endpoint --help
->>>
 Usage: hfie endpoint[OPTIONS] COMMAND[ARGS]...
 
 Options:
@@ -42,14 +16,17 @@ Commands:
   logs    Get logs about an endpoint
   test    Test and endpoint
   update  Update an endpoint
-
 ```
+
+## Create
 
 To create an endpoint:
 
 ```
 hfie endpoint create examples/development.json
 ```
+
+## List
 
 To list all your endpoints:
 
@@ -61,17 +38,23 @@ hfie endpoint list
 hfie endpoint list --json
 ```
 
+## Update
+
 To update an endpoint, edit `examples/development.json`
 
 ```
 hfie endpoint update development examples/development.json
 ```
 
+## Logs
+
 To see the logs:
 
 ```
 hfie endpoint logs development
 ```
+
+## Delete
 
 To delete the endpoint
 
@@ -82,7 +65,7 @@ hfie endpoint delete development
 this will ask you if you are sure you want to delete before moving forward. If
 you want to force the deletion you can use `--force`
 
-# JSON format
+## JSON format
 
 The `endpoint create` and `endpoint update` commands both require JSONs of the fomat:
 
@@ -117,16 +100,3 @@ The `endpoint create` and `endpoint update` commands both require JSONs of the f
 ```
 
 See `examples/development.json` for an example.
-
-# For development
-
-Create a virtual environment and install the package
-
-```
-make virtualenv
-```
-
-Run tests
-```
-pytest
-```

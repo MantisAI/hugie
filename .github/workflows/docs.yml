@@ -1,0 +1,14 @@
+name: docs
+on: pull_request
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+      - name: Install mkdocs material
+        run: pip install mkdocs-material
+      - name: Deploy page
+        run: mkdocs gh-deploy --force
