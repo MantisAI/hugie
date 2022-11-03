@@ -59,7 +59,8 @@ def list(json: bool = typer.Option(False, help="Prints the full output in JSON."
 
 @app.command()
 def create(
-    data: str = typer.Argument(..., help="Path JSON data to create the endpoint")
+    data: str = typer.Argument(..., help="Path JSON data to create the endpoint"),
+    json: bool = typer.Option(False, help="Prints the full output in JSON."),
 ):
     """
     Create an endpoint
@@ -84,14 +85,19 @@ def create(
     except requests.exceptions.RequestException as e:
         typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
         raise SystemExit(e)
-    typer.secho("Endpoint created successfully", fg=typer.colors.GREEN)
-    typer.echo(response.json())
+    typer.secho(
+        f"Endpoint {data['name']} created successfully in {data['provider']['vendor']} using {data['model']['repository']}",
+        fg=typer.colors.GREEN,
+    )
+    if json:
+        typer.echo(response.json())
 
 
 @app.command()
 def update(
     name: str = typer.Argument(..., help="Endpoint name"),
     data: str = typer.Argument(..., help="Path to JSON data to update the endpoint"),
+    json: bool = typer.Option(False, help="Prints the full output in JSON."),
 ):
     """
     Update an endpoint
@@ -116,7 +122,8 @@ def update(
         raise SystemExit(e)
 
     typer.secho("Endpoint updated successfully", fg=typer.colors.GREEN)
-    typer.echo(response.json())
+    if json:
+        typer.echo(response.json())
 
 
 @app.command()
