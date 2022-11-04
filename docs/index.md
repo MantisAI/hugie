@@ -5,7 +5,7 @@ Inference Endpoints via the command line.
 
 ## Demo
 
-[![asciicast](https://asciinema.org/a/QA68DK9RPsNiO2zycx4ihugg0.svg)](https://asciinema.org/a/QA68DK9RPsNiO2zycx4ihugg0)
+[![asciicast](https://asciinema.org/a/BkNNlNE8jTLbBa5rI5hPpdbIW.svg)](https://asciinema.org/a/BkNNlNE8jTLbBa5rI5hPpdbIW)
 
 ## Docs
 
