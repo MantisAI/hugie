@@ -1,6 +1,6 @@
 # Hugie 🐻
 
-📖 Official [documentation](https://mantisai.github.io/hfie/)
+📖 Official [documentation](https://mantisai.github.io/hugie/)
 
 Hugie is a Command Line Interface (CLI) for working with the Huggingface Inference Endpoints API ([API docs](https://huggingface.co/docs/inference-endpoints/api_reference))
 
