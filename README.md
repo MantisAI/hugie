@@ -137,3 +137,11 @@ Run tests
 ```
 pytest
 ```
+
+To upload to PyPi run
+```
+python -m build
+twine upload dist/*
+```
+
+you need the mantisnlp password to proceed. Ask Nick or Matt.

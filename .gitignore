@@ -5,3 +5,4 @@
 # Python cache, eggs
 *egg-info/
 *__pycache__/
+dist/
