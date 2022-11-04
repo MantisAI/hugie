@@ -3,7 +3,7 @@
 This page details the usage of the endpoint command
 
 ```
-Usage: hfie endpoint[OPTIONS] COMMAND[ARGS]...
+Usage: hugie endpoint[OPTIONS] COMMAND[ARGS]...
 
 Options:
   --help  Show this message and exit.
@@ -23,7 +23,7 @@ Commands:
 To create an endpoint:
 
 ```
-hfie endpoint create examples/development.json
+hugie endpoint create examples/development.json
 ```
 
 ## List
@@ -31,11 +31,11 @@ hfie endpoint create examples/development.json
 To list all your endpoints:
 
 ```
-hfie endpoint list
+hugie endpoint list
 
 # Use --json option to view all content
 
-hfie endpoint list --json
+hugie endpoint list --json
 ```
 
 ## Update
@@ -43,7 +43,7 @@ hfie endpoint list --json
 To update an endpoint, edit `examples/development.json`
 
 ```
-hfie endpoint update development examples/development.json
+hugie endpoint update development examples/development.json
 ```
 
 ## Logs
@@ -51,7 +51,7 @@ hfie endpoint update development examples/development.json
 To see the logs:
 
 ```
-hfie endpoint logs development
+hugie endpoint logs development
 ```
 
 ## Delete
@@ -59,7 +59,7 @@ hfie endpoint logs development
 To delete the endpoint
 
 ```
-hfie endpoint delete development
+hugie endpoint delete development
 ```
 
 this will ask you if you are sure you want to delete before moving forward. If

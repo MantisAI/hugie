@@ -1,6 +1,6 @@
-# Hfie ✨
+# Hugie 🐻
 
-Hfie is a tool that allows you to interact with HuggingFace
+Hugie is a tool that allows you to interact with HuggingFace
 Inference Endpoints via the command line.
 
 ## Demo

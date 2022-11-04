@@ -1,6 +1,6 @@
 import typer
 
-from hfie.endpoint import app as endpoint_app
+from hugie.endpoint import app as endpoint_app
 
 app = typer.Typer()
 

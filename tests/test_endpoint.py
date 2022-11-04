@@ -5,7 +5,7 @@ from typer.testing import CliRunner
 import requests
 import pytest
 
-from hfie.endpoint import app
+from hugie.endpoint import app
 
 runner = CliRunner()
 
