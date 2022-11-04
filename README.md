@@ -1,35 +1,31 @@
-# Huggingface Inference Endpoints helper
+# Hugie 🐻
 
-Documentation: https://mantisai.github.io/hfie/ 📑
+📖 Official [documentation](https://mantisai.github.io/hfie/)
 
-A Command Line Interface (CLI) for working with the Huggingface Inference Endpoints API.
-
-See API docs: https://huggingface.co/docs/inference-endpoints/api_reference
+Hugie is a Command Line Interface (CLI) for working with the Huggingface Inference Endpoints API ([API docs](https://huggingface.co/docs/inference-endpoints/api_reference))
 
 # Getting started
 
 The package is pip installable and can be installed directly from github with:
 
 ```
-pip install git+https://github.com/MantisAI/hfie.git
+pip install git+https://github.com/MantisAI/hugie.git
 ```
 
-# ENV vars
+⚠️  To get started, you must set your individual or organisation Huggingface token into an env var called `HUGGINGFACE_READ_TOKEN`.
 
-To get started, you must set your individual or organisation Huggingface token into an env var called `HUGGINGFACE_READ_TOKEN`.
-
-# Usage
+# Usage 📺
 
 tldr; watch the video:
 
 [![asciicast](https://asciinema.org/a/QA68DK9RPsNiO2zycx4ihugg0.svg)](https://asciinema.org/a/QA68DK9RPsNiO2zycx4ihugg0)
 
-# Getting help
+# Commands ⌨️
 
 ```
-hfie endpoint --help
+hugie endpoint --help
 >>>
-Usage: hfie endpoint[OPTIONS] COMMAND[ARGS]...
+Usage: hugie endpoint[OPTIONS] COMMAND[ARGS]...
 
 Options:
   --help  Show this message and exit.
@@ -45,44 +41,53 @@ Commands:
 
 ```
 
+## Create
+
 To create an endpoint:
 
 ```
-hfie endpoint create examples/development.json
+hugie endpoint create examples/development.json
 ```
+
+## List
 
 To list all your endpoints:
 
 ```
-hfie endpoint list
+hugie endpoint list
 
 # Use --json option to view all content
 
-hfie endpoint list --json
+hugie endpoint list --json
 ```
+
+## Update
 
 To update an endpoint, edit `examples/development.json`
 
 ```
-hfie endpoint update development examples/development.json
+hugie endpoint update development examples/development.json
 ```
+
+## Logs
 
 To see the logs:
 
 ```
-hfie endpoint logs development
+hugie endpoint logs development
 ```
 
+## Delete
 To delete the endpoint
 
 ```
-hfie endpoint delete development
+hugie endpoint delete development
 ```
 
 this will ask you if you are sure you want to delete before moving forward. If
 you want to force the deletion you can use `--force`
 
-# JSON format
+## JSON format
 
 The `endpoint create` and `endpoint update` commands both require JSONs of the fomat:
 
@@ -118,7 +123,9 @@ The `endpoint create` and `endpoint update` commands both require JSONs of the f
 
 See `examples/development.json` for an example.
 
-# For development
+## For development
+
+Read our CONTRIBUTING.md then
 
 Create a virtual environment and install the package
 

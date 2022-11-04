@@ -1,8 +1,8 @@
 import requests
 import typer
 
-from hfie.settings import Settings
-from hfie.utils import format_table, load_json
+from hugie.settings import Settings
+from hugie.utils import format_table, load_json
 
 settings = Settings()
 

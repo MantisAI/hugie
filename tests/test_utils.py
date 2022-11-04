@@ -3,7 +3,7 @@ import os
 
 import pytest
 
-from hfie.utils import format_table, load_json
+from hugie.utils import format_table, load_json
 
 
 @pytest.fixture

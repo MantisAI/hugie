@@ -3,7 +3,7 @@
 To install the library run
 
 ```
-pip install git+https://github.com/MantisAI/hfie.git
+pip install git+https://github.com/MantisAI/hugie.git
 ```
 
 In order to be able to use the library you need to setup
