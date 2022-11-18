@@ -49,6 +49,8 @@ def test_create(monkeypatch, data_path):
         def raise_for_status():
             pass
 
+        status_code = 200
+
     monkeypatch.setattr("requests.post", lambda url, **kwargs: MockCreateResponse)
     result = runner.invoke(app, ["create", data_path])
     assert result.exit_code == 0
