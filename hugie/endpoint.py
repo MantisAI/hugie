@@ -1,3 +1,5 @@
+from typing import Optional
+
 import requests
 import typer
 
@@ -16,7 +18,11 @@ API_ERROR_MESSAGE = "An error occured while making the API call"
 
 
 @app.command()
-def list(json: bool = typer.Option(False, help="Prints the full output in JSON.")):
+def list(
+    json: Optional[bool] = typer.Option(
+        None, "--json", help="Prints the full output in JSON."
+    )
+):
     """
     List all the deployed endpoints
     """
@@ -60,7 +66,9 @@ def list(json: bool = typer.Option(False, help="Prints the full output in JSON."
 @app.command()
 def create(
     data: str = typer.Argument(..., help="Path JSON data to create the endpoint"),
-    json: bool = typer.Option(False, help="Prints the full output in JSON."),
+    json: Optional[bool] = typer.Option(
+        None, "--json", help="Prints the full output in JSON."
+    ),
 ):
     """
     Create an endpoint
@@ -97,7 +105,9 @@ def create(
 def update(
     name: str = typer.Argument(..., help="Endpoint name"),
     data: str = typer.Argument(..., help="Path to JSON data to update the endpoint"),
-    json: bool = typer.Option(False, help="Prints the full output in JSON."),
+    json: Optional[bool] = typer.Option(
+        None, "--json", help="Prints the full output in JSON."
+    ),
 ):
     """
     Update an endpoint
@@ -169,7 +179,9 @@ def delete(
 @app.command()
 def info(
     name: str = typer.Argument(..., help="Endpoint name"),
-    json: bool = typer.Option(False, help="Prints the full output in JSON."),
+    json: Optional[bool] = typer.Option(
+        None, "--json", help="Prints the full output in JSON."
+    ),
 ):
     """
     Get info about an endpoint
