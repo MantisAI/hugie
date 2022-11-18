@@ -82,21 +82,23 @@ def create(
         response = requests.post(settings.endpoint_url, headers=headers, json=data)
         response.raise_for_status()
     except requests.exceptions.HTTPError as e:
-        if response.json().get("error"):
-            typer.secho(
-                f"Error creating endpoint: {response.json()['error']}",
-                fg=typer.colors.RED,
-            )
-        else:
-            typer.secho("Error creating endpoint", fg=typer.colors.RED)
+        typer.secho("Error creating endpoint", fg=typer.colors.RED)
         raise SystemExit(e)
     except requests.exceptions.RequestException as e:
         typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
         raise SystemExit(e)
-    typer.secho(
-        f"Endpoint {data['name']} created successfully on {data['provider']['vendor']} using {data['model']['repository']}",
-        fg=typer.colors.GREEN,
-    )
+
+    if response.status_code == 400:
+        typer.secho(f"Malformed data in {data}", fg=typer.colors.YELLOW)
+    elif response.status_code == 401:
+        typer.secho("Invalid token", fg=typer.colors.YELLOW)
+    elif response.status_code == 409:
+        typer.secho(f"Endpoint {name} already exists", fg=typer.colors.YELLOW)
+    else:
+        typer.secho(
+            f"Endpoint {data['name']} created successfully on {data['provider']['vendor']} using {data['model']['repository']}",
+            fg=typer.colors.GREEN,
+        )
     if json:
         typer.echo(response.json())
 
