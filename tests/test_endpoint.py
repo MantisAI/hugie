@@ -59,6 +59,8 @@ def test_update(monkeypatch, data_path):
         def json():
             pass
 
+        status_code = 200
+
     monkeypatch.setattr("requests.put", lambda url, headers, json: MockUpdateResponse)
     result = runner.invoke(app, ["update", "test", data_path])
     assert result.exit_code == 0

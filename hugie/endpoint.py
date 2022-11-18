@@ -131,7 +131,14 @@ def update(
         typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
         raise SystemExit(e)
 
-    typer.secho("Endpoint updated successfully", fg=typer.colors.GREEN)
+    if response.status_code == 400:
+        typer.secho("Malformed data in {data}", fg=typer.colors.YELLOW)
+    elif response.status_code == 401:
+        typer.secho("Token provided not valid", fg=typer.colors.YELLOW)
+    elif response.status_code == 404:
+        typer.secho("Endpoint {name} not found", fg=typer.colors.YELLOW)
+    else:
+        typer.secho("Endpoint updated successfully", fg=typer.colors.GREEN)
     if json:
         typer.echo(response.json())
 
