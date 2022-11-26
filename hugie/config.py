@@ -34,9 +34,12 @@ def modify(
     vendor: str = typer.Option(None, help="Vendor to use. One of ['aws','gcp']"),
     region: str = typer.Option(None, help="Vendor specific region, e.g. 'us-east-1'"),
     overwrite: bool = typer.Option(
-        False, help="Overwrite inpiut file with updated config"
+        False, "--overwrite", "-o", help="Overwrite inpiut file with updated config"
     ),
 ):
+    """
+    Modify an existing endpoint config file
+    """
 
     config = InferenceEndpointConfig.from_json(path)
 
