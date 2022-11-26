@@ -291,7 +291,7 @@ def test(
     if input_file:
         data = load_json(input_file)
     else:
-        data = {"inputs": inputs, "parameters": {"top_k": 10}}
+        data = {"inputs": inputs}
 
     # Send a call to the endpoint
     try:
