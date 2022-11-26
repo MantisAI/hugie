@@ -1,0 +1,27 @@
+
+{
+  "accountId": null,
+  "api_type": "protected",
+  "compute": {
+    "accelerator": "cpu",
+    "instanceSize": "small",
+    "instanceType": "c6i",
+    "scaling": {
+      "minReplica": 1,
+      "maxReplica": 1
+    }
+  },
+  "model": {
+    "framework": "custom",
+    "image": {
+      "huggingface": {}
+    },
+    "repository": "foo/bar",
+    "revision": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "task": "text-classification"
+  },
+  "name": "development",
+  "provider": {
+    "vendor": "aws"
+  }
+}
