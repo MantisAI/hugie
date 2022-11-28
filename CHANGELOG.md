@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Add endpoint config subcommand #47 (resolves #41)
+- Adds `ls` alias to `list` command #50
+- Adds `-f` shortcut to `--force` command #50
+
+### Changed
+- Only create docs on merge to main #50
+
+### Removed
+- Removes `--no-force` option to `delete` command #50
 
 ## [0.2.0]
 
