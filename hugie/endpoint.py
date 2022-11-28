@@ -83,14 +83,14 @@ def create(
     try:
         response = requests.post(settings.endpoint_url, headers=headers, json=data)
         response.raise_for_status()
-    except requests.exceptions.HTTPError:
+    except requests.exceptions.HTTPError as e:
         typer.secho("Error creating endpoint", fg=typer.colors.RED)
-        logger.exception()
-        raise SystemExit()
-    except requests.exceptions.RequestException:
+        logger.exception(e)
+        raise SystemExit(e)
+    except requests.exceptions.RequestException as e:
         typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
-        logger.exception()
-        raise SystemExit()
+        logger.exception(e)
+        raise SystemExit(e)
 
     if response.status_code == 400:
         typer.secho(f"Malformed data in {data}", fg=typer.colors.YELLOW)
