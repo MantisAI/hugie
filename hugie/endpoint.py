@@ -17,7 +17,8 @@ headers = {
 API_ERROR_MESSAGE = "An error occured while making the API call"
 
 
-@app.command()
+@app.command("ls")
+@app.command("list")
 def list(
     json: Optional[bool] = typer.Option(
         None, "--json", help="Prints the full output in JSON."
@@ -149,7 +150,7 @@ def update(
 def delete(
     name: str = typer.Argument(..., help="Endpoint name"),
     force: bool = typer.Option(
-        False, help="Force deletion without asking user confirmation"
+        False, "--force", "-f", help="Force deletion without asking user confirmation"
     ),
 ):
     """

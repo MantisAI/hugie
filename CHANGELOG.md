@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Adds `ls` alias to `list` command #50
+- Adds `-f` shortcut to `--force` command #50
+
+### Changed
+- Only create docs on merge to main #50
+
+### Removed
+- Removes `--no-force` option to `delete` command #50
+
 ## [0.2.0]
 
 ✨ Renamed to Hugie 🐻
