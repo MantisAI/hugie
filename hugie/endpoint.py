@@ -17,6 +17,15 @@ headers = {
 API_ERROR_MESSAGE = "An error occured while making the API call"
 
 
+class TokenNotSet(Exception):
+    def __str__(self):
+        return "You need to define a token using the environment variable HUGGINGFACE_READ_TOKEN"
+
+
+if not settings.token:
+    raise TokenNotSet
+
+
 @app.command("ls")
 @app.command("list")
 def list(
