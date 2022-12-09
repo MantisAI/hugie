@@ -3,6 +3,7 @@ from typing import Optional
 import requests
 import typer
 
+from hugie.models import InferenceEndpointConfig
 from hugie.settings import Settings
 from hugie.utils import format_table, load_json
 
@@ -87,7 +88,8 @@ def create(
         data (str): Path to JSON data to create the endpoint
     """
 
-    data = load_json(data)
+    data = InferenceEndpointConfig.from_json(data).dict()
+
     try:
         response = requests.post(settings.endpoint_url, headers=headers, json=data)
         response.raise_for_status()
@@ -124,7 +126,7 @@ def update(
     """
     Update an endpoint
     """
-    data = load_json(data)
+    data = dict(InferenceEndpointConfig.from_json(data))
 
     try:
         response = requests.put(
