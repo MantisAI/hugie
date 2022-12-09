@@ -40,8 +40,13 @@ def data_path(tmp_path):
 
 def test_inference_endpoint_config_serialization(data_path):
     config = InferenceEndpointConfig.from_json(data_path)
-    config = dict(config)
+    config = config.dict()
     assert isinstance(config, dict)
+    assert config["compute"]["instanceSize"] == "small"
+    assert config["model"]["framework"] == "custom"
+    assert config["model"]["image"]["huggingface"] == {}
+    assert config["name"] == "development"
+    assert config["provider"]["region"] == "us-east-1"
 
 
 def test_modify_writes_to_stdout(data_path):
