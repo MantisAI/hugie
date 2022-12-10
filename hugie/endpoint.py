@@ -2,6 +2,7 @@ from typing import Optional
 
 import requests
 import typer
+from loguru import logger
 
 from hugie.settings import Settings
 from hugie.utils import format_table, load_json
@@ -93,9 +94,11 @@ def create(
         response.raise_for_status()
     except requests.exceptions.HTTPError as e:
         typer.secho("Error creating endpoint", fg=typer.colors.RED)
+        logger.exception(e)
         raise SystemExit(e)
     except requests.exceptions.RequestException as e:
         typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
+        logger.exception(e)
         raise SystemExit(e)
 
     if response.status_code == 400:
@@ -103,12 +106,13 @@ def create(
     elif response.status_code == 401:
         typer.secho("Invalid token", fg=typer.colors.YELLOW)
     elif response.status_code == 409:
-        typer.secho(f"Endpoint {name} already exists", fg=typer.colors.YELLOW)
+        typer.secho(f"Endpoint {data['name']} already exists", fg=typer.colors.YELLOW)
     else:
         typer.secho(
             f"Endpoint {data['name']} created successfully on {data['provider']['vendor']} using {data['model']['repository']}",
             fg=typer.colors.GREEN,
         )
+
     if json:
         typer.echo(response.json())
 
@@ -130,7 +134,7 @@ def update(
         response = requests.put(
             f"{settings.endpoint_url}/{name}", headers=headers, json=data
         )
-    except requests.exceptions.HTTPError as e:
+    except requests.exceptions.HTTPError:
         if response.json().get("error"):
             typer.secho(
                 f"Error updating endpoint: {response.json()['error']}",
@@ -138,19 +142,22 @@ def update(
             )
         else:
             typer.secho("Error updating endpoint", fg=typer.colors.RED)
-        raise SystemExit(e)
-    except requests.exceptions.RequestException as e:
+            logger.exception()
+        raise SystemExit()
+    except requests.exceptions.RequestException:
         typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
-        raise SystemExit(e)
+        logger.exception()
+        raise SystemExit()
 
     if response.status_code == 400:
         typer.secho("Malformed data in {data}", fg=typer.colors.YELLOW)
     elif response.status_code == 401:
         typer.secho("Token provided not valid", fg=typer.colors.YELLOW)
     elif response.status_code == 404:
-        typer.secho("Endpoint {name} not found", fg=typer.colors.YELLOW)
+        typer.secho("Endpoint {data['name']} not found", fg=typer.colors.YELLOW)
     else:
         typer.secho("Endpoint updated successfully", fg=typer.colors.GREEN)
+
     if json:
         typer.echo(response.json())
 
