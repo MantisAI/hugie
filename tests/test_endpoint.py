@@ -1,11 +1,10 @@
 import json
 import os
 
-from typer.testing import CliRunner
-import requests
 import pytest
-
+import requests
 from hugie.endpoint import app
+from typer.testing import CliRunner
 
 runner = CliRunner()
 
@@ -14,12 +13,27 @@ runner = CliRunner()
 def data_path(tmp_path):
     data_path = os.path.join(tmp_path, "data.json")
     data = {
+        "accountId": None,
+        "compute": {
+            "accelerator": "cpu",
+            "instanceSize": "small",
+            "instanceType": "c6i",
+            "scaling": {"maxReplica": 1, "minReplica": 1},
+        },
+        "model": {
+            "framework": "custom",
+            "image": {"huggingface": {}},
+            "repository": "t5-small",
+            "revision": "main",
+            "task": "translation",
+        },
         "name": "development",
-        "provider": {"vendor": "aws"},
-        "model": {"repository": "t5"},
+        "provider": {"region": "us-east-1", "vendor": "aws"},
+        "type": "protected",
     }
     with open(data_path, "w") as f:
         f.write(json.dumps(data))
+
     return data_path
 
 
