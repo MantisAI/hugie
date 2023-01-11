@@ -96,6 +96,14 @@ def create(
     data = InferenceEndpointConfig.from_json(data).dict()
 
     if name_suffix:
+        if len(name_suffix) > 5:
+            name_suffix = name_suffix[:5]
+            typer.secho("The name suffix should be 5 characters or fewer")
+            typer.secho(
+                "Truncating suffix to {name_suffix}",
+                fg=typer.colors.RED,
+            )
+
         data["name"] = f"{data['name']}-{name_suffix}"
         typer.secho(f"Endpoint name set to {data['name']}", fg=typer.colors.YELLOW)
 
