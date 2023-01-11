@@ -80,15 +80,24 @@ def create(
     json: Optional[bool] = typer.Option(
         None, "--json", help="Prints the full output in JSON."
     ),
+    name_suffix: Optional[str] = typer.Option(
+        None, "--name-suffix", help="Suffix to add to the endpoint name"
+    ),
 ):
     """
     Create an endpoint
 
     Args:
         data (str): Path to JSON data to create the endpoint
+        json (bool, optional): Prints the full output in JSON. Defaults to None.
+        name_suffix (str, optional): Suffix to add to the endpoint name. Defaults to None.
     """
 
     data = InferenceEndpointConfig.from_json(data).dict()
+
+    if name_suffix:
+        data["name"] = f"{data['name']}-{name_suffix}"
+        typer.secho(f"Endpoint name set to {data['name']}", fg=typer.colors.YELLOW)
 
     try:
         response = requests.post(settings.endpoint_url, headers=headers, json=data)
@@ -105,12 +114,13 @@ def create(
     elif response.status_code == 401:
         typer.secho("Invalid token", fg=typer.colors.YELLOW)
     elif response.status_code == 409:
-        typer.secho(f"Endpoint {name} already exists", fg=typer.colors.YELLOW)
+        typer.secho(f"Endpoint {data['name']} already exists", fg=typer.colors.YELLOW)
     else:
         typer.secho(
             f"Endpoint {data['name']} created successfully on {data['provider']['vendor']} using {data['model']['repository']}",
             fg=typer.colors.GREEN,
         )
+
     if json:
         typer.echo(response.json())
 
@@ -153,6 +163,7 @@ def update(
         typer.secho("Endpoint {name} not found", fg=typer.colors.YELLOW)
     else:
         typer.secho("Endpoint updated successfully", fg=typer.colors.GREEN)
+
     if json:
         typer.echo(response.json())
 
