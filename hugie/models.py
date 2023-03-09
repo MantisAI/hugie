@@ -3,6 +3,8 @@ These models are based on the openapi specification of the Hugging Face
 Inference Endpoints API: https://api.endpoints.huggingface.cloud/
 """
 
+from pydantic import BaseModel, BaseSettings, Field
+
 from hugie.utils import load_json
 
 
@@ -42,7 +44,9 @@ class EndpointConfig(BaseSettings):
     type: str = None
     compute: ComputeModel = ComputeModel()
     model: ModelModel = ModelModel()
-    name: str = None
+    name: str = Field(
+        ..., description="Name of the endpoint", max_length=32, regex="^[a-z0-9-]+$"
+    )
     provider: ProviderModel = ProviderModel()
 
     @classmethod
