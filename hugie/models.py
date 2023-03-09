@@ -41,7 +41,11 @@ class EndpointConfig(BaseSettings):
     """
 
     accountId: str = None
-    type: str = None
+    type: str = Field(
+        ...,
+        description="Type of the endpoint, must be one of ['public', 'protected', 'private']",
+        regex="^(public|protected|private)$",
+    )
     compute: ComputeModel = ComputeModel()
     model: ModelModel = ModelModel()
     name: str = Field(
