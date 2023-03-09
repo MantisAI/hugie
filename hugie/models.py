@@ -8,9 +8,9 @@ from pydantic import BaseModel, BaseSettings, Field
 from hugie.utils import load_json
 
 
-class ScalingModel(BaseModel):
-    minReplica: int = 1
-    maxReplica: int = 1
+class EndpointScaling(BaseModel):
+    minReplica: int = Field(..., alias="Minimum number of endpoint replicas")
+    maxReplica: int = Field(..., alias="Maximum number of endpoint replicas")
 
 
 class ComputeModel(BaseModel):
@@ -18,7 +18,7 @@ class ComputeModel(BaseModel):
     accelerator: str = None
     instanceSize: str = None
     instanceType: str = None
-    scaling: ScalingModel = ScalingModel()
+    scaling: EndpointScaling = EndpointScaling()
 
 
 class ModelModel(BaseModel):
@@ -68,7 +68,7 @@ class EndpointConfig(BaseSettings):
             task=config["model"]["task"],
         )
 
-        scaling = ScalingModel(
+        scaling = EndpointScaling(
             minReplica=config["compute"]["scaling"]["minReplica"],
             maxReplica=config["compute"]["scaling"]["maxReplica"],
         )
