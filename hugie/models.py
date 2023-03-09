@@ -1,4 +1,7 @@
-from pydantic import BaseModel, BaseSettings
+"""
+These models are based on the openapi specification of the Hugging Face
+Inference Endpoints API: https://api.endpoints.huggingface.cloud/
+"""
 
 from hugie.utils import load_json
 
@@ -30,7 +33,7 @@ class ProviderModel(BaseModel):
     region: str = None
 
 
-class InferenceEndpointConfig(BaseSettings):
+class EndpointConfig(BaseSettings):
     """
     Config for the inference endpoint
     """
@@ -74,7 +77,7 @@ class InferenceEndpointConfig(BaseSettings):
             region=config["provider"]["region"],
         )
 
-        config = InferenceEndpointConfig(
+        config = EndpointConfig(
             accountId=config["accountId"],
             type=config["type"],
             compute=compute,
