@@ -13,11 +13,13 @@ class EndpointScaling(BaseModel):
     maxReplica: int = Field(..., alias="Maximum number of endpoint replicas")
 
 
-class ComputeModel(BaseModel):
+class EndpointCompute(BaseModel):
 
-    accelerator: str = None
-    instanceSize: str = None
-    instanceType: str = None
+    accelerator: str = Field(
+        ..., alias="Accelerator type, one of [cpu, gpu]", regex="^(cpu|gpu)$"
+    )
+    instanceSize: str = Field(..., alias="Instance size, e.g. large")
+    instanceType: str = Field(..., alias="Instance type, e.g. c6i")
     scaling: EndpointScaling = EndpointScaling()
 
 
@@ -46,7 +48,7 @@ class EndpointConfig(BaseSettings):
         description="Type of the endpoint, must be one of ['public', 'protected', 'private']",
         regex="^(public|protected|private)$",
     )
-    compute: ComputeModel = ComputeModel()
+    compute: EndpointCompute = EndpointCompute()
     model: ModelModel = ModelModel()
     name: str = Field(
         ..., description="Name of the endpoint", max_length=32, regex="^[a-z0-9-]+$"
@@ -73,7 +75,7 @@ class EndpointConfig(BaseSettings):
             maxReplica=config["compute"]["scaling"]["maxReplica"],
         )
 
-        compute = ComputeModel(
+        compute = EndpointCompute(
             accelerator=config["compute"]["accelerator"],
             instanceSize=config["compute"]["instanceSize"],
             instanceType=config["compute"]["instanceType"],
