@@ -76,7 +76,7 @@ def list(
 
 @app.command()
 def create(
-    data: str = typer.Argument(..., help="Path JSON data to create the endpoint"),
+    data: str = typer.Argument(..., help="Path to JSON data to create the endpoint"),
     json: Optional[bool] = typer.Option(
         None, "--json", help="Prints the full output in JSON."
     ),
@@ -105,7 +105,7 @@ def create(
     elif response.status_code == 401:
         typer.secho("Invalid token", fg=typer.colors.YELLOW)
     elif response.status_code == 409:
-        typer.secho(f"Endpoint {name} already exists", fg=typer.colors.YELLOW)
+        typer.secho(f"Endpoint {data['name']} already exists", fg=typer.colors.YELLOW)
     else:
         typer.secho(
             f"Endpoint {data['name']} created successfully on {data['provider']['vendor']} using {data['model']['repository']}",

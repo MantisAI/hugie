@@ -26,7 +26,11 @@ def modify(
     framework: str = typer.Option("huggingface", help="Framework to use"),
     image: str = typer.Option(
         None,
-        help="Image to use when deploying model endppint. Must be string representing a valid JSON, e.g. '{'huggingface': {}}'",
+        help=(
+            "Image to use when deploying model endpoint."
+            "Must be string representing a valid JSON,"
+            "e.g. '{'huggingface': {}}'"
+        ),
     ),
     repository: str = typer.Option(None, help="Name of the hf model repository"),
     revision: str = typer.Option(None, help="Revision of the hf model repository"),
