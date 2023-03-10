@@ -87,8 +87,12 @@ def create(
     Args:
         data (str): Path to JSON data to create the endpoint
     """
+    # Check whether data is a path or url
 
-    data = InferenceEndpointConfig.from_json(data).dict()
+    if data.startswith("http"):
+        data = InferenceEndpointConfig.from_url(data).dict()
+    else:
+        data = InferenceEndpointConfig.from_json(data).dict()
 
     try:
         response = requests.post(settings.endpoint_url, headers=headers, json=data)
@@ -126,7 +130,10 @@ def update(
     """
     Update an endpoint
     """
-    data = dict(InferenceEndpointConfig.from_json(data))
+    if data.startswith("http"):
+        data = InferenceEndpointConfig.from_url(data).dict()
+    else:
+        data = InferenceEndpointConfig.from_json(data).dict()
 
     try:
         response = requests.put(

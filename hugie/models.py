@@ -1,3 +1,4 @@
+import requests
 from pydantic import BaseModel, BaseSettings
 
 from hugie.utils import load_json
@@ -9,7 +10,6 @@ class ScalingModel(BaseModel):
 
 
 class ComputeModel(BaseModel):
-
     accelerator: str = None
     instanceSize: str = None
     instanceType: str = None
@@ -17,7 +17,6 @@ class ComputeModel(BaseModel):
 
 
 class ModelModel(BaseModel):
-
     framework: str = None
     image: dict = {"huggingface": {}}
     repository: str = None
@@ -43,12 +42,22 @@ class InferenceEndpointConfig(BaseSettings):
     provider: ProviderModel = ProviderModel()
 
     @classmethod
+    def from_url(self, url: str):
+        """
+        Load a config from a url
+        """
+        config = requests.get(url).json()
+        return self.create_config(self, config)
+
+    @classmethod
     def from_json(self, path: str):
         """
         Load a config from a JSON file.
         """
         config = load_json(path)
+        return self.create_config(self, config)
 
+    def create_config(self, config: dict):
         model = ModelModel(
             framework=config["model"]["framework"],
             image=config["model"]["image"],

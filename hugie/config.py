@@ -8,7 +8,7 @@ app = typer.Typer()
 
 @app.command()
 def modify(
-    path: str,
+    path: str = typer.Argument(..., help="File path or url of config file"),
     accountId: str = typer.Option(
         None, help="ID of the account (for private endpoints)"
     ),
