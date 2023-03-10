@@ -14,7 +14,6 @@ class EndpointScaling(BaseModel):
 
 
 class EndpointCompute(BaseModel):
-
     accelerator: str = Field(
         ..., alias="Accelerator type, one of [cpu, gpu]", regex="^(cpu|gpu)$"
     )
@@ -23,12 +22,40 @@ class EndpointCompute(BaseModel):
     scaling: EndpointScaling = EndpointScaling()
 
 
-class ModelModel(BaseModel):
+class EndpointImageCredentials(BaseModel):
+    username: str = Field(..., alias="Username for private registry")
+    password: str = Field(..., alias="Password for private registry")
 
-    framework: str = None
-    image: dict = {"huggingface": {}}
-    repository: str = None
-    revision: str = None
+
+class EndpointModelImageConfig(BaseModel):
+    credentials: EndpointImageCredentials = EndpointImageCredentials()
+    env: dict = Field({}, alias="Environment variables")
+    health_route: str = Field("/health", alias="Health route")
+    port: int = Field(80, alias="Port", description="Endpoint API port")
+    url: str = Field(
+        ..., alias="URL for the container", example="https://host/image:tag"
+    )
+
+
+class EndpointModelImage(BaseModel):
+    image: str = Field(
+        "huggingface",
+        description="One of ['huggingface', 'custom']",
+        regex="^(huggingface|custom)$",
+    )
+    config: dict = {}
+
+    def __call__(self, **kwargs):
+        return {self.image: self.config}
+
+
+class EndpointModel(BaseModel):
+    framework: str = Field(..., alias="Framework, one of [custom, pytorch, tensorflow]")
+    image: dict = Field({"huggingface": {}})
+    repository: str = Field(..., alias="Repository name, e.g. gpt2")
+    revision: str = Field(
+        ..., description="Model commit hash, if not set, the latest commit will be used"
+    )
     task: str = None
 
 
@@ -49,7 +76,7 @@ class EndpointConfig(BaseSettings):
         regex="^(public|protected|private)$",
     )
     compute: EndpointCompute = EndpointCompute()
-    model: ModelModel = ModelModel()
+    model: EndpointModel = EndpointModel()
     name: str = Field(
         ..., description="Name of the endpoint", max_length=32, regex="^[a-z0-9-]+$"
     )
@@ -62,7 +89,7 @@ class EndpointConfig(BaseSettings):
         """
         config = load_json(path)
 
-        model = ModelModel(
+        model = EndpointModel(
             framework=config["model"]["framework"],
             image=config["model"]["image"],
             repository=config["model"]["repository"],

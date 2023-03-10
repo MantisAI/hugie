@@ -76,7 +76,9 @@ def list(
 
 @app.command()
 def create(
-    data: str = typer.Argument(..., help="Path to JSON data to create the endpoint"),
+    data: str = typer.Argument(
+        ..., help="Path or url of a JSON from which to create the endpoint"
+    ),
     json: Optional[bool] = typer.Option(
         None, "--json", help="Prints the full output in JSON."
     ),
@@ -85,7 +87,7 @@ def create(
     Create an endpoint
 
     Args:
-        data (str): Path to JSON data to create the endpoint
+        data (str): Path or url of a JSON from which to create the endpoint.
     """
 
     data = EndpointConfig.from_json(data).dict()
