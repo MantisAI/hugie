@@ -73,7 +73,7 @@ def list(
         else:
             typer.secho("No endpoints found")
 
-    return table
+    return data["items"]
 
 
 @app.command()
