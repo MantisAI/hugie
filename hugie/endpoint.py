@@ -3,7 +3,7 @@ from typing import Optional
 import requests
 import typer
 
-from hugie.models import InferenceEndpointConfig
+from hugie.models import EndpointConfig
 from hugie.settings import Settings
 from hugie.utils import format_table, load_json
 
@@ -76,7 +76,9 @@ def list(
 
 @app.command()
 def create(
-    data: str = typer.Argument(..., help="Path JSON data to create the endpoint"),
+    data: str = typer.Argument(
+        ..., help="Path or url of a JSON from which to create the endpoint"
+    ),
     json: Optional[bool] = typer.Option(
         None, "--json", help="Prints the full output in JSON."
     ),
@@ -85,10 +87,10 @@ def create(
     Create an endpoint
 
     Args:
-        data (str): Path to JSON data to create the endpoint
+        data (str): Path or url of a JSON from which to create the endpoint.
     """
 
-    data = InferenceEndpointConfig.from_json(data).dict()
+    data = EndpointConfig.from_json(data).dict()
 
     try:
         response = requests.post(settings.endpoint_url, headers=headers, json=data)
@@ -105,7 +107,7 @@ def create(
     elif response.status_code == 401:
         typer.secho("Invalid token", fg=typer.colors.YELLOW)
     elif response.status_code == 409:
-        typer.secho(f"Endpoint {name} already exists", fg=typer.colors.YELLOW)
+        typer.secho(f"Endpoint {data['name']} already exists", fg=typer.colors.YELLOW)
     else:
         typer.secho(
             f"Endpoint {data['name']} created successfully on {data['provider']['vendor']} using {data['model']['repository']}",
@@ -126,7 +128,7 @@ def update(
     """
     Update an endpoint
     """
-    data = dict(InferenceEndpointConfig.from_json(data))
+    data = dict(EndpointConfig.from_json(data))
 
     try:
         response = requests.put(
