@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Add endpoint config subcommand #47 (resolves #41)
 - Adds `ls` alias to `list` command #50
 - Adds `-f` shortcut to `--force` command #50
 
@@ -32,5 +33,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Make delete error messsage more informative #25
 - Add tests and CI/CD
 
-### Bug fixes
+### Fixed
 - Correct table column widths #16

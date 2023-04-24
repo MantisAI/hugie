@@ -4,6 +4,7 @@ import requests
 import typer
 from loguru import logger
 
+from hugie.models import InferenceEndpointConfig
 from hugie.settings import Settings
 from hugie.utils import format_table, load_json
 
@@ -16,6 +17,15 @@ headers = {
     "Content-Type": "application/json",
 }
 API_ERROR_MESSAGE = "An error occured while making the API call"
+
+
+class TokenNotSet(Exception):
+    def __str__(self):
+        return "You need to define a token using the environment variable HUGGINGFACE_READ_TOKEN"
+
+
+if not settings.token:
+    raise TokenNotSet
 
 
 @app.command("ls")
@@ -79,7 +89,8 @@ def create(
         data (str): Path to JSON data to create the endpoint
     """
 
-    data = load_json(data)
+    data = InferenceEndpointConfig.from_json(data).dict()
+
     try:
         response = requests.post(settings.endpoint_url, headers=headers, json=data)
         response.raise_for_status()
@@ -119,7 +130,7 @@ def update(
     """
     Update an endpoint
     """
-    data = load_json(data)
+    data = dict(InferenceEndpointConfig.from_json(data))
 
     try:
         response = requests.put(

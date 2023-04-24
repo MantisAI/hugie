@@ -1,9 +1,10 @@
 # Venv, direnv
+.env
 .envrc
 .venv/
 
 # Python cache, eggs
-*egg-info/
 *__pycache__/
-dist/
+*egg-info/
 build
+dist/
