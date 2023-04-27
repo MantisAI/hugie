@@ -126,7 +126,7 @@ def update(
     """
     Update an endpoint
     """
-    data = dict(InferenceEndpointConfig.from_json(data))
+    data = InferenceEndpointConfig.from_json(data).dict()
 
     try:
         response = requests.put(
