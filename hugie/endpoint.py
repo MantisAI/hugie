@@ -37,7 +37,33 @@ def list(
     """
     List all the deployed endpoints
     """
-    response = requests.get(settings.endpoint_url, headers=headers)
+
+    try:
+        response = requests.get(
+            f"{settings.endpoint_url}", headers=headers, json={})
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
+        raise SystemExit(e)
+    
+    if response.status_code == 401:
+        typer.secho(f"Invalid authentication credentials or token", fg=typer.colors.YELLOW)
+    elif response.status_code == 500:
+        typer.secho(f"Internal Server Error", fg=typer.colors.YELLOW)
+    elif response.status_code == 501:
+        typer.secho(f"Not Implemented", fg=typer.colors.YELLOW)
+    elif response.status_code == 502:
+        typer.secho(f"Bad Gateway", fg=typer.colors.YELLOW)
+    elif response.status_code == 503:
+        typer.secho(f"Service Unavailable", fg=typer.colors.YELLOW)
+    elif response.status_code == 504:
+        typer.secho(f"Gateway Timeout", fg=typer.colors.YELLOW)
+    elif response.status_code == 509:
+        typer.secho(f"Bandwidth Limit Exceeded", fg=typer.colors.YELLOW)    
+    elif response.status_code == 511:
+        typer.secho(f"Network Authentication Required", fg=typer.colors.YELLOW)
+    else:
+        typer.secho("Successfully listed all endpoints", fg=typer.colors.GREEN)
 
     if json:
         return typer.echo(response.json())
