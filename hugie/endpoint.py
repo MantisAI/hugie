@@ -30,6 +30,7 @@ if not settings.token:
 @app.command("ls")
 @app.command("list")
 def list(
+    data: str = typer.Argument(..., help="Path to JSON data to update the endpoint"),
     json: Optional[bool] = typer.Option(
         None, "--json", help="Prints the full output in JSON."
     )
@@ -40,10 +41,11 @@ def list(
 
     try:
         response = requests.get(
-            f"{settings.endpoint_url}", headers=headers, json={})
-        response.raise_for_status()
+            f"{settings.endpoint_url}", headers=headers, json={}
+        )
     except requests.exceptions.RequestException as e:
         typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
+        response.raise_for_status()
         raise SystemExit(e)
     
     if response.status_code == 401:

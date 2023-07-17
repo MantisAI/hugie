@@ -49,6 +49,9 @@ def test_list(monkeypatch):
                     }
                 ]
             }
+        def raise_for_status():
+            pass
+        status_code=401,
 
     monkeypatch.setattr("requests.get", lambda url, headers: MockListResponse)
     result = runner.invoke(app, ["list"])
