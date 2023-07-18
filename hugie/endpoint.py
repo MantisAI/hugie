@@ -30,7 +30,6 @@ if not settings.token:
 @app.command("ls")
 @app.command("list")
 def list(
-    data: str = typer.Argument(..., help="Path to JSON data to update the endpoint"),
     json: Optional[bool] = typer.Option(
         None, "--json", help="Prints the full output in JSON."
     )
