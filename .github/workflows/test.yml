@@ -16,7 +16,7 @@ jobs:
       - name: Install library
         run: |
           pip install poetry
-          poetry install .
+          poetry install
       - name: Run tests and coverage
         run: |
           poetry run pytest
