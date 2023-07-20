@@ -130,7 +130,7 @@ Read our CONTRIBUTING.md then
 Create a virtual environment and install the package
 
 ```
-make virtualenv
+poetry install
 ```
 
 Run tests
@@ -139,9 +139,8 @@ pytest
 ```
 
 To upload to PyPi run
-```
-python -m build
-twine upload dist/*
+``
+poetry publish
 ```
 
 you need the mantisnlp password to proceed. Ask Nick or Matt.
