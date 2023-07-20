@@ -2,7 +2,8 @@
 name = "hugie"
 version = "0.3.1"
 description = "CLI for managing Hugging Face Inference Endpoints"
-authors = ["Matthew Upson <matt@mantisnlp.com>, Nick Sorros <nick@mantisnlp.com>"]
+authors = ["Matthew Upson <matt@mantisnlp.com>",
+            "Nick Sorros <nick@mantisnlp.com>"]
 license = "MIT License"
 readme = "README.md"
 
