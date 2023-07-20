@@ -1,4 +1,6 @@
-from pydantic import BaseModel, BaseSettings
+from pydantic import BaseModel
+from pydantic_settings import BaseSettings
+from typing import Optional
 
 from hugie.utils import load_json
 
@@ -35,7 +37,7 @@ class InferenceEndpointConfig(BaseSettings):
     Config for the inference endpoint
     """
 
-    accountId: str = None
+    accountId: Optional[str] = None
     type: str = None
     compute: ComputeModel = ComputeModel()
     model: ModelModel = ModelModel()

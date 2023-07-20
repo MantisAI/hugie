@@ -40,7 +40,7 @@ def data_path(tmp_path):
 
 def test_inference_endpoint_config_serialization(data_path):
     config = InferenceEndpointConfig.from_json(data_path)
-    config = config.dict()
+    config = config.model_dump()
     assert isinstance(config, dict)
     assert config["compute"]["instanceSize"] == "small"
     assert config["model"]["framework"] == "custom"

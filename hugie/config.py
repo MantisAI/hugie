@@ -100,13 +100,13 @@ def modify(
 
     if overwrite:
         try:
-            srsly.write_json(path, config.dict())
+            srsly.write_json(path, config.model_dump())
             typer.secho(f"Updated config at {path}", fg=typer.colors.GREEN)
         except Exception:
             typer.secho(f"Failed to update config at {path}", fg=typer.colors.RED)
 
     else:
-        typer.secho(srsly.json_dumps(config.dict()), fg=typer.colors.YELLOW)
+        typer.secho(srsly.json_dumps(config.model_dump()), fg=typer.colors.YELLOW)
 
 
 if __name__ == "__main__":

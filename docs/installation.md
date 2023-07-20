@@ -1,9 +1,9 @@
 ## Installation
 
-To install the library run
+To install the library run (we recommend using [pipx](https://pypa.github.io/pipx/))
 
 ```
-pip install git+https://github.com/MantisAI/hugie.git
+pipx install hugie
 ```
 
 In order to be able to use the library you need to setup

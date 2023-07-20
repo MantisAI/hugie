@@ -88,7 +88,7 @@ def create(
         data (str): Path to JSON data to create the endpoint
     """
 
-    data = InferenceEndpointConfig.from_json(data).dict()
+    data = InferenceEndpointConfig.from_json(data).model_dump()
 
     try:
         response = requests.post(settings.endpoint_url, headers=headers, json=data)
@@ -126,7 +126,7 @@ def update(
     """
     Update an endpoint
     """
-    data = InferenceEndpointConfig.from_json(data).dict()
+    data = InferenceEndpointConfig.from_json(data).model_dump()
 
     try:
         response = requests.put(
