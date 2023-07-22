@@ -6,16 +6,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.2]
+
 ### Added
 - Add endpoint config subcommand #47 (resolves #41)
 - Adds `ls` alias to `list` command #50
 - Adds `-f` shortcut to `--force` command #50
+- Adds `poetry` for dependency management #69
+- Adds `ui` command to open Hugging Face Inference Endpoint website in browser #70
 
 ### Changed
 - Only create docs on merge to main #50
 
 ### Removed
 - Removes `--no-force` option to `delete` command #50
+
+### Fixed
+- Breaking changes introduced by pydantic 2.0.0 #68
+- Fix data bug in `update` function #63
 
 ## [0.2.0]
 
