@@ -1,6 +1,29 @@
+[tool.poetry]
+name = "hugie"
+version = "0.3.1"
+description = "CLI for managing Hugging Face Inference Endpoints"
+authors = ["Matthew Upson <matt@mantisnlp.com>",
+            "Nick Sorros <nick@mantisnlp.com>"]
+license = "MIT License"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+typer = "^0.9.0"
+wasabi = "^1.1.2"
+requests = "^2.31.0"
+pydantic = "^2.0.3"
+srsly = "^2.4.7"
+pydantic-settings = "^2.0.2"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.3.3"
+pytest = "^7.4.0"
+mkdocs-material = "^9.1.19"
+
 [build-system]
-requires = [
-    "setuptools>=42",
-    "wheel"
-]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+hugie = "hugie.__main__:app"

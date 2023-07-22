@@ -6,10 +6,10 @@ Hugie is a Command Line Interface (CLI) for working with the Huggingface Inferen
 
 # Getting started
 
-The package is pip installable and can be installed directly from github with:
+The package is pip installable and can be installed from PyPI
 
 ```
-pip install git+https://github.com/MantisAI/hugie.git
+pipx install hugie
 ```
 
 ⚠️  To get started, you must set your individual or organisation Huggingface token into an env var called `HUGGINGFACE_READ_TOKEN`.
@@ -21,6 +21,22 @@ tldr; watch the video:
 [![asciicast](https://asciinema.org/a/BkNNlNE8jTLbBa5rI5hPpdbIW.svg)](https://asciinema.org/a/BkNNlNE8jTLbBa5rI5hPpdbIW)
 
 # Commands ⌨️
+
+```
+hugie
+>>>
+Usage: hugie [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help                          Show this message and exit.
+
+Commands:
+  config
+  endpoint
+  version   Show version.
+```
+
+# Endpoint
 
 ```
 hugie endpoint --help
@@ -130,7 +146,7 @@ Read our CONTRIBUTING.md then
 Create a virtual environment and install the package
 
 ```
-make virtualenv
+poetry install
 ```
 
 Run tests
@@ -139,9 +155,9 @@ pytest
 ```
 
 To upload to PyPi run
-```
-python -m build
-twine upload dist/*
+
+``
+poetry publish
 ```
 
 you need the mantisnlp password to proceed. Ask Nick or Matt.
