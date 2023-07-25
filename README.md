@@ -31,9 +31,11 @@ Options:
   --help                          Show this message and exit.
 
 Commands:
+  Commands:
   config
   endpoint
-  version   Show version.
+  ui        Open the Hugging Face Endpoints UI in a browser
+  version   Print hugie version
 ```
 
 # Endpoint
