@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hugie"
-version = "0.3.1"
+version = "0.3.2"
 description = "CLI for managing Hugging Face Inference Endpoints"
 authors = ["Matthew Upson <matt@mantisnlp.com>",
             "Nick Sorros <nick@mantisnlp.com>"]
