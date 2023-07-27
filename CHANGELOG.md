@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add endpoint config subcommand #47 (resolves #41)
 - Adds `ls` alias to `list` command #50
 - Adds `-f` shortcut to `--force` command #50
-- Adds `hugie ui` command #70
+- Adds `poetry` for dependency management #69
+- Adds `ui` command to open Hugging Face Inference Endpoint website in browser #70
 
 ### Changed
 - Only create docs on merge to main #50
@@ -29,8 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Address missing token message #46
 - Handle 40x responses in create #45
 - Update now handles 40x codes #44
-- Removve --no-json from cli #43
-
+- Remove --no-json from cli #43
 
 ## [0.2.0]
 
