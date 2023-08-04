@@ -74,7 +74,7 @@ def list(
 @app.command()
 def create(
     data: str = typer.Argument(None, help="Path JSON data to create the endpoint"),
-    accountId: str = typer.Option(
+    account_id: str = typer.Option(
         None, help="ID of the account (for private endpoints)"
     ),
     name: str = typer.Option("hf-endpoint", help="Name of the endpoint"),
@@ -84,14 +84,14 @@ def create(
     accelerator: str = typer.Option(
         "cpu", help="Accelerator to use. One of ['CPU','GPU']"
     ),
-    instanceType: str = typer.Option("c6i"),
-    instanceSize: str = typer.Option("small"),
-    minReplica: int = typer.Option(1, help="Minimum number of replicas"),
-    maxReplica: int = typer.Option(1, help="Maximum number of replicas"),
+    instance_type: str = typer.Option("c6i"),
+    instance_size: str = typer.Option("small"),
+    min_replica: int = typer.Option(1, help="Minimum number of replicas"),
+    max_replica: int = typer.Option(1, help="Maximum number of replicas"),
     framework: str = typer.Option("custom", help="Framework to use"),
     repository: str = typer.Option("t5-small", help="Name of the hf model repository"),
     revision: str = typer.Option("main", help="Revision of the hf model repository"),
-    task: str = typer.Option("translation", help="Task of the model"),
+    task: str = typer.Option("text-generation", help="Task of the model"),
     vendor: str = typer.Option("aws", help="Vendor to use. One of ['aws','gcp']"),
     region: str = typer.Option(
         "us-east-1", help="Vendor specific region, e.g. 'us-east-1'"
@@ -114,11 +114,11 @@ def create(
             "type": type,
             "compute": {
                 "accelerator": accelerator,
-                "instanceType": instanceType,
-                "instanceSize": instanceSize,
+                "instanceType": instance_type,
+                "instanceSize": instance_size,
                 "scaling": {
-                    "minReplica": minReplica,
-                    "maxReplica": maxReplica,
+                    "minReplica": min_replica,
+                    "maxReplica": max_replica,
                 },
             },
             "model": {
