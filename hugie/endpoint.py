@@ -92,6 +92,9 @@ def create(
     repository: str = typer.Option("t5-small", help="Name of the hf model repository"),
     revision: str = typer.Option("main", help="Revision of the hf model repository"),
     task: str = typer.Option("text-generation", help="Task of the model"),
+    image: str = typer.Option(
+        "huggingface", help="Image to use from huggingface or tgi"
+    ),
     vendor: str = typer.Option("aws", help="Vendor to use. One of ['aws','gcp']"),
     region: str = typer.Option(
         "us-east-1", help="Vendor specific region, e.g. 'us-east-1'"
@@ -108,6 +111,13 @@ def create(
     """
 
     if not data:
+        IMAGES = {
+            "huggingface": {"name": "huggingface", "image": {}},
+            "tgi": {
+                "name": "custom",
+                "image": {"url": "ghcr.io/huggingface/text-generation-inference:0.9.3"},
+            },
+        }
         data = {
             "accountId": None,
             "name": name,
@@ -127,7 +137,7 @@ def create(
                 "task": task,
                 "framework": framework,
                 "image": {
-                    "huggingface": {},
+                    IMAGES[image]["name"]: IMAGES[image]["image"],
                 },
             },
             "provider": {
@@ -139,7 +149,7 @@ def create(
         data = InferenceEndpointConfig.parse_obj(data).model_dump()
     else:
         data = InferenceEndpointConfig.from_json(data).model_dump()
-    print(data)
+
     name = data["name"]
     vendor = data["provider"]["vendor"]
     repository = data["model"]["repository"]
