@@ -70,6 +70,38 @@ def test_create(monkeypatch, data_path):
     assert result.exit_code == 0
 
 
+def test_create_args(monkeypatch):
+    class MockCreateResponse:
+        def json():
+            pass
+
+        def raise_for_status():
+            pass
+
+        status_code = 200
+
+    monkeypatch.setattr("requests.post", lambda url, **kwargs: MockCreateResponse)
+    result = runner.invoke(
+        app,
+        [
+            "create",
+            "--name",
+            "test",
+            "--instance-type",
+            "local",
+            "--instance-size",
+            "medium",
+            "--repository",
+            "bert",
+            "--task",
+            "text-generation",
+            "--accelerator",
+            "gpu",
+        ],
+    )
+    assert result.exit_code == 0
+
+
 def test_update(monkeypatch, data_path):
     class MockUpdateResponse:
         def json():
