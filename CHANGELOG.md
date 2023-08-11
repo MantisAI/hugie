@@ -6,6 +6,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0]
+
+### Changed
+
+
+```
+Usage: hugie endpoint create [OPTIONS] [DATA]
+
+  Create an endpoint
+
+  Args:     data (str): Path to JSON data to create the endpoint
+
+Arguments:
+  [DATA]  Path JSON data to create the endpoint
+
+Options:
+  --account-id TEXT      ID of the account (for private endpoints)
+  --name TEXT            Name of the endpoint  [default: hf-endpoint]
+  --type TEXT            Type of endpoint, one of ['public', 'protected',
+                         'private']
+  --accelerator TEXT     Accelerator to use. One of ['CPU','GPU']  [default:
+                         cpu]
+  --instance-type TEXT   [default: c6i]
+  --instance-size TEXT   [default: small]
+  --min-replica INTEGER  Minimum number of replicas  [default: 1]
+  --max-replica INTEGER  Maximum number of replicas  [default: 1]
+  --framework TEXT       Framework to use  [default: custom]
+  --repository TEXT      Name of the hf model repository  [default: t5-small]
+  --revision TEXT        Revision of the hf model repository  [default: main]
+  --task TEXT            Task of the model  [default: text-generation]
+  --image TEXT           Image to use from huggingface or tgi  [default:
+                         huggingface]
+  --vendor TEXT          Vendor to use. One of ['aws','gcp']  [default: aws]
+  --region TEXT          Vendor specific region, e.g. 'us-east-1'  [default:
+                         us-east-1]
+  --json                 Prints the full output in JSON.
+  --help                 Show this message and exit.
+```
+
+`hugie endpoint create` now received params with all the fields of the endpoint configuration file. This means you can easily deploy an endpoint by simply changing only the params that are neccesary away from the default
+
 ## [0.2.0..0.3.2] 2023-07-27
 
 ### Added
