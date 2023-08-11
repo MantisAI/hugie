@@ -1,4 +1,5 @@
 from typing import Optional
+import json as json_lib
 
 import requests
 import typer
@@ -89,7 +90,32 @@ def list(
 
 @app.command()
 def create(
-    data: str = typer.Argument(..., help="Path JSON data to create the endpoint"),
+    data: str = typer.Argument(None, help="Path JSON data to create the endpoint"),
+    account_id: str = typer.Option(
+        None, help="ID of the account (for private endpoints)"
+    ),
+    name: str = typer.Option("hf-endpoint", help="Name of the endpoint"),
+    type: str = typer.Option(
+        None, help="Type of endpoint, one of ['public', 'protected', 'private']"
+    ),
+    accelerator: str = typer.Option(
+        "cpu", help="Accelerator to use. One of ['CPU','GPU']"
+    ),
+    instance_type: str = typer.Option("c6i"),
+    instance_size: str = typer.Option("small"),
+    min_replica: int = typer.Option(1, help="Minimum number of replicas"),
+    max_replica: int = typer.Option(1, help="Maximum number of replicas"),
+    framework: str = typer.Option("custom", help="Framework to use"),
+    repository: str = typer.Option("t5-small", help="Name of the hf model repository"),
+    revision: str = typer.Option("main", help="Revision of the hf model repository"),
+    task: str = typer.Option("text-generation", help="Task of the model"),
+    image: str = typer.Option(
+        "huggingface", help="Image to use from huggingface or tgi"
+    ),
+    vendor: str = typer.Option("aws", help="Vendor to use. One of ['aws','gcp']"),
+    region: str = typer.Option(
+        "us-east-1", help="Vendor specific region, e.g. 'us-east-1'"
+    ),
     json: Optional[bool] = typer.Option(
         None, "--json", help="Prints the full output in JSON."
     ),
@@ -101,7 +127,46 @@ def create(
         data (str): Path to JSON data to create the endpoint
     """
 
-    data = InferenceEndpointConfig.from_json(data).model_dump()
+    if not data:
+        IMAGES = {
+            "huggingface": {"name": "huggingface", "image": {}},
+            "tgi": {
+                "name": "custom",
+                "image": {"url": "ghcr.io/huggingface/text-generation-inference:0.9.3"},
+            },
+        }
+        data = {
+            "accountId": None,
+            "name": name,
+            "type": type,
+            "compute": {
+                "accelerator": accelerator,
+                "instanceType": instance_type,
+                "instanceSize": instance_size,
+                "scaling": {
+                    "minReplica": min_replica,
+                    "maxReplica": max_replica,
+                },
+            },
+            "model": {
+                "repository": repository,
+                "revision": revision,
+                "task": task,
+                "framework": framework,
+                "image": {
+                    IMAGES[image]["name"]: IMAGES[image]["image"],
+                },
+            },
+            "provider": {
+                "vendor": vendor,
+                "region": region,
+            },
+            "type": "protected",
+        }
+        data = InferenceEndpointConfig.parse_obj(data).model_dump()
+    else:
+        data = InferenceEndpointConfig.from_json(data).model_dump()
+
     name = data["name"]
     vendor = data["provider"]["vendor"]
     repository = data["model"]["repository"]
@@ -114,7 +179,7 @@ def create(
 
     except (requests.exceptions.HTTPError, requests.exceptions.RequestException) as e:
 
-        handle_requests_error(e)
+        handle_requests_error(e, data)
 
     except Exception as e:
 
