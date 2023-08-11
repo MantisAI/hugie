@@ -36,31 +36,13 @@ def list(
 
     try:
         response = requests.get(
-            f"{settings.endpoint_url}", headers=headers, 
+            f"{settings.endpoint_url}",
+            headers=headers,
         )
         response.raise_for_status()
-        
+
     except requests.exceptions.HTTPError as e:
-        if e.response.status_code == 401:
-            typer.secho("Invalid authentication credentials or token", fg=typer.colors.YELLOW)
-        elif e.response.status_code == 500:
-            typer.secho("Internal Server Error", fg=typer.colors.YELLOW)
-        elif e.response.status_code == 501:
-            typer.secho("Not Implemented", fg=typer.colors.YELLOW)
-        elif e.response.status_code == 502:
-            typer.secho("Bad Gateway", fg=typer.colors.YELLOW)
-        elif e.response.status_code == 503:
-            typer.secho("Service Unavailable", fg=typer.colors.YELLOW)
-        elif e.response.status_code == 504:
-            typer.secho("Gateway Timeout", fg=typer.colors.YELLOW)
-        elif e.response.status_code == 509:
-            typer.secho("Bandwidth Limit Exceeded", fg=typer.colors.YELLOW)    
-        elif e.response.status_code == 511:
-            typer.secho("Network Authentication Required", fg=typer.colors.YELLOW)
-            
-        else:
-            typer.secho("Error creating endpoint", fg=typer.colors.RED)
-        raise SystemExit(e)
+        handle_requests_error(e)
     except requests.exceptions.RequestException as e:
         typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
         raise SystemExit(e)

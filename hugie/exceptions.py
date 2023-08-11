@@ -37,6 +37,20 @@ def handle_requests_error(exception, data):
                 "Conflict: An endpoint with this name already exists.",
                 fg=typer.colors.YELLOW,
             )
+        elif status_code == 500:
+            typer.secho("Internal Server Error", fg=typer.colors.YELLOW)
+        elif status_code == 501:
+            typer.secho("Not Implemented", fg=typer.colors.YELLOW)
+        elif status_code == 502:
+            typer.secho("Bad Gateway", fg=typer.colors.YELLOW)
+        elif status_code == 503:
+            typer.secho("Service Unavailable", fg=typer.colors.YELLOW)
+        elif status_code == 504:
+            typer.secho("Gateway Timeout", fg=typer.colors.YELLOW)
+        elif status_code == 509:
+            typer.secho("Bandwidth Limit Exceeded", fg=typer.colors.YELLOW)
+        elif status_code == 511:
+            typer.secho("Network Authentication Required", fg=typer.colors.YELLOW)
         else:
             typer.secho("An HTTP error occurred.", fg=typer.colors.RED)
 
