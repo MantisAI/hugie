@@ -33,7 +33,24 @@ def list(
     """
     List all the deployed endpoints
     """
-    response = requests.get(settings.endpoint_url, headers=headers)
+
+    try:
+        response = requests.get(
+            f"{settings.endpoint_url}",
+            headers=headers,
+        )
+        response.raise_for_status()
+
+    except requests.exceptions.HTTPError as e:
+        handle_requests_error(e)
+    except requests.exceptions.RequestException as e:
+        typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
+        raise SystemExit(e)
+    else:
+        typer.secho(
+            "Successfully listed all endpoints",
+            fg=typer.colors.GREEN,
+        )
 
     if json:
         return typer.echo(response.json())
