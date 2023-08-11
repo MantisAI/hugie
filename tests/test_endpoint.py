@@ -78,6 +78,9 @@ def test_update(monkeypatch, data_path):
         def json():
             pass
 
+        def raise_for_status():
+            pass
+
         status_code = 200
 
     monkeypatch.setattr("requests.put", lambda url, headers, json: MockUpdateResponse)

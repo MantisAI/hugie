@@ -3,6 +3,7 @@ from typing import Optional
 import requests
 import typer
 
+from hugie.exceptions import TokenNotSetError, handle_requests_error
 from hugie.models import InferenceEndpointConfig
 from hugie.settings import Settings
 from hugie.utils import format_table, load_json
@@ -18,13 +19,8 @@ headers = {
 API_ERROR_MESSAGE = "An error occured while making the API call"
 
 
-class TokenNotSet(Exception):
-    def __str__(self):
-        return "You need to define a token using the environment variable HUGGINGFACE_READ_TOKEN"
-
-
 if not settings.token:
-    raise TokenNotSet
+    raise TokenNotSetError
 
 
 @app.command("ls")
@@ -124,30 +120,39 @@ def create(
     """
 
     data = InferenceEndpointConfig.from_json(data).model_dump()
+    name = data["name"]
+    vendor = data["provider"]["vendor"]
+    repository = data["model"]["repository"]
 
     try:
+        # Try to create the endpoint
+
         response = requests.post(settings.endpoint_url, headers=headers, json=data)
         response.raise_for_status()
-    except requests.exceptions.HTTPError as e:
-        typer.secho("Error creating endpoint", fg=typer.colors.RED)
-        raise SystemExit(e)
-    except requests.exceptions.RequestException as e:
-        typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
+
+    except (requests.exceptions.HTTPError, requests.exceptions.RequestException) as e:
+
+        handle_requests_error(e)
+
+    except Exception as e:
+
+        # Catch all other exceptions
+
+        typer.secho("An unexpected error occured", fg=typer.colors.RED)
         raise SystemExit(e)
 
-    if response.status_code == 400:
-        typer.secho(f"Malformed data in {data}", fg=typer.colors.YELLOW)
-    elif response.status_code == 401:
-        typer.secho("Invalid token", fg=typer.colors.YELLOW)
-    elif response.status_code == 409:
-        typer.secho(f"Endpoint {name} already exists", fg=typer.colors.YELLOW)
     else:
+
+        # If the command succeeds print this output and exit with code 0
+
         typer.secho(
-            f"Endpoint {data['name']} created successfully on {data['provider']['vendor']} using {data['model']['repository']}",
+            f"Endpoint {name} created successfully on {vendor} using {repository}",
             fg=typer.colors.GREEN,
         )
-    if json:
-        typer.echo(response.json())
+
+        if json:
+            typer.echo(response.json())
+        typer.Exit(0)
 
 
 @app.command()
@@ -167,29 +172,26 @@ def update(
         response = requests.put(
             f"{settings.endpoint_url}/{name}", headers=headers, json=data
         )
-    except requests.exceptions.HTTPError as e:
-        if response.json().get("error"):
-            typer.secho(
-                f"Error updating endpoint: {response.json()['error']}",
-                fg=typer.colors.RED,
-            )
-        else:
-            typer.secho("Error updating endpoint", fg=typer.colors.RED)
-        raise SystemExit(e)
-    except requests.exceptions.RequestException as e:
-        typer.secho(API_ERROR_MESSAGE, fg=typer.colors.RED)
+        response.raise_for_status()
+
+    except (requests.exceptions.HTTPError, requests.exceptions.RequestException) as e:
+
+        handle_requests_error(e)
+
+    except Exception as e:
+
+        # Catch all other exceptions
+
+        typer.secho("An unexpected error occured", fg=typer.colors.RED)
         raise SystemExit(e)
 
-    if response.status_code == 400:
-        typer.secho("Malformed data in {data}", fg=typer.colors.YELLOW)
-    elif response.status_code == 401:
-        typer.secho("Token provided not valid", fg=typer.colors.YELLOW)
-    elif response.status_code == 404:
-        typer.secho("Endpoint {name} not found", fg=typer.colors.YELLOW)
     else:
         typer.secho("Endpoint updated successfully", fg=typer.colors.GREEN)
-    if json:
-        typer.echo(response.json())
+
+        if json:
+            typer.echo(response.json())
+
+        typer.Exit(0)
 
 
 @app.command()
