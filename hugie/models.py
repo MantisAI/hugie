@@ -1,88 +1,17 @@
-from pydantic import BaseModel
-from pydantic_settings import BaseSettings
-from typing import Optional
-
+from hugie.models_v2 import Endpoint
 from hugie.utils import load_json
 
 
-class ScalingModel(BaseModel):
-    minReplica: int = 1
-    maxReplica: int = 1
-
-
-class ComputeModel(BaseModel):
-
-    accelerator: str = None
-    instanceSize: str = None
-    instanceType: str = None
-    scaling: ScalingModel = ScalingModel()
-
-
-class ModelModel(BaseModel):
-
-    framework: str = None
-    image: dict = {"huggingface": {}}
-    repository: str = None
-    revision: str = None
-    task: str = None
-
-
-class ProviderModel(BaseModel):
-    vendor: str = None
-    region: str = None
-
-
-class InferenceEndpointConfig(BaseSettings):
+class EndpointV2(Endpoint):
     """
     Config for the inference endpoint
+
+    Based on the default class created by datamodel_code_generator, but
+    incoporates classmethod to allow loading the config from a json file.
     """
 
-    accountId: Optional[str] = None
-    type: str = None
-    compute: ComputeModel = ComputeModel()
-    model: ModelModel = ModelModel()
-    name: str = None
-    provider: ProviderModel = ProviderModel()
-
     @classmethod
-    def from_json(self, path: str):
-        """
-        Load a config from a JSON file.
-        """
-        config = load_json(path)
+    def from_json(cls, path: str):
+        data = load_json(path)
 
-        model = ModelModel(
-            framework=config["model"]["framework"],
-            image=config["model"]["image"],
-            repository=config["model"]["repository"],
-            revision=config["model"]["revision"],
-            task=config["model"]["task"],
-        )
-
-        scaling = ScalingModel(
-            minReplica=config["compute"]["scaling"]["minReplica"],
-            maxReplica=config["compute"]["scaling"]["maxReplica"],
-        )
-
-        compute = ComputeModel(
-            accelerator=config["compute"]["accelerator"],
-            instanceSize=config["compute"]["instanceSize"],
-            instanceType=config["compute"]["instanceType"],
-            scaling=scaling,
-        )
-
-        provider = ProviderModel(
-            vendor=config["provider"]["vendor"],
-            region=config["provider"]["region"],
-        )
-
-        config = InferenceEndpointConfig(
-            accountId=config["accountId"],
-            type=config["type"],
-            compute=compute,
-            model=model,
-            name=config["name"],
-            provider=provider,
-        )
-
-        return config
+        return cls(**data)
