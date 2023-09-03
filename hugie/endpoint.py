@@ -5,7 +5,7 @@ import requests
 import typer
 
 from hugie.exceptions import TokenNotSetError, handle_requests_error
-from hugie.models import InferenceEndpointConfig
+from hugie.models import EndpointV2
 from hugie.settings import Settings
 from hugie.utils import format_table, load_json
 
@@ -163,9 +163,9 @@ def create(
             },
             "type": "protected",
         }
-        data = InferenceEndpointConfig.parse_obj(data).model_dump()
+        data = EndpointV2.parse_obj(data).model_dump()
     else:
-        data = InferenceEndpointConfig.from_json(data).model_dump()
+        data = EndpointV2.from_json(data).model_dump()
 
     name = data["name"]
     vendor = data["provider"]["vendor"]
@@ -213,7 +213,7 @@ def update(
     """
     Update an endpoint
     """
-    data = InferenceEndpointConfig.from_json(data).model_dump()
+    data = EndpointV2.from_json(data).model_dump()
 
     try:
         response = requests.put(

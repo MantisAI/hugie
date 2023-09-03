@@ -3,7 +3,7 @@ import os
 import pytest
 import srsly
 from hugie.config import app
-from hugie.models import InferenceEndpointConfig
+from hugie.models import EndpointV2
 from typer.testing import CliRunner
 
 from common import INCOMPLETE_JSON
@@ -39,7 +39,7 @@ def data_path(tmp_path):
 
 
 def test_inference_endpoint_config_serialization(data_path):
-    config = InferenceEndpointConfig.from_json(data_path)
+    config = EndpointV2.from_json(data_path)
     config = config.model_dump()
     assert isinstance(config, dict)
     assert config["compute"]["instanceSize"] == "small"
