@@ -1,7 +1,7 @@
 import srsly
 import typer
 
-from hugie.models import InferenceEndpointConfig
+from hugie.models import EndpointV2
 
 app = typer.Typer()
 
@@ -41,7 +41,7 @@ def modify(
     Modify an existing endpoint config file
     """
 
-    config = InferenceEndpointConfig.from_json(path)
+    config = EndpointV2.from_json(path)
 
     # Standard configs
 
