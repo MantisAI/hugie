@@ -163,7 +163,7 @@ def create(
             },
             "type": "protected",
         }
-        data = EndpointV2.parse_obj(data).model_dump()
+        data = EndpointV2.model_validate(data).model_dump()
     else:
         data = EndpointV2.from_json(data).model_dump()
 
